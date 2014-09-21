@@ -9,16 +9,14 @@ import static me.creativei.metronome.Constants.LOG_TAG;
 
 public class BeatsTimer {
     private int delay;
-    private Runnable onStartTask;
-    private Runnable onStopTask;
+    private final TimerStateTask timerStateTask;
     private Timer timer;
     private boolean isRunning;
     private long lastRun;
 
-    public BeatsTimer(int delay, final Runnable onStartTask, Runnable onStopTask) {
+    public BeatsTimer(int delay, TimerStateTask timerStateTask) {
         this.delay = delay;
-        this.onStartTask = onStartTask;
-        this.onStopTask = onStopTask;
+        this.timerStateTask = timerStateTask;
     }
 
     public void start() {
@@ -39,9 +37,11 @@ public class BeatsTimer {
     }
 
     public void stop() {
-        timer.cancel();
-        isRunning = false;
-        onStopTask.run();
+        if (isRunning) {
+            timer.cancel();
+            isRunning = false;
+            timerStateTask.runStopTask();
+        }
     }
 
     private TimerTask newTimerTask() {
@@ -49,8 +49,21 @@ public class BeatsTimer {
             @Override
             public void run() {
                 lastRun = System.currentTimeMillis();
-                onStartTask.run();
+                timerStateTask.runStartTask();
             }
         };
+    }
+
+    public void resume() {
+        if (isRunning)
+            update(delay);
+    }
+
+    public void pause() {
+        if (isRunning) {
+            timer.cancel();
+            timerStateTask.runPauseTask();
+        }
+
     }
 }

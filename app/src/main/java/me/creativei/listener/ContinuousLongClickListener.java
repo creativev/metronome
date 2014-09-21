@@ -7,13 +7,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
-public class ContinuousLongPressListener implements View.OnTouchListener, View.OnLongClickListener {
+public class ContinuousLongClickListener implements View.OnTouchListener, View.OnLongClickListener {
     public static final int WHAT = 264776257;
     private final View.OnLongClickListener onLongClickListener;
     private final Handler handler;
     private int delay;
 
-    public ContinuousLongPressListener(View view, View.OnLongClickListener onLongClickListener) {
+    public ContinuousLongClickListener(View view, View.OnLongClickListener onLongClickListener) {
         this.onLongClickListener = onLongClickListener;
         delay = 750;
         handler = new Handler();
@@ -46,6 +46,6 @@ public class ContinuousLongPressListener implements View.OnTouchListener, View.O
     }
 
     public static void setListener(Button btnUp, View.OnLongClickListener onLongClickListener) {
-        new ContinuousLongPressListener(btnUp, onLongClickListener);
+        new ContinuousLongClickListener(btnUp, onLongClickListener);
     }
 }

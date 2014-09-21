@@ -6,50 +6,17 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/beatsPatternContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal" />
 
-        <ImageButton
-            android:id="@+id/imgBeat1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:src="@drawable/ic_beats_off" />
-
-        <ImageButton
-            android:id="@+id/imgBeat2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:src="@drawable/ic_beats_off" />
-
-        <ImageButton
-            android:id="@+id/imgBeat3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:src="@drawable/ic_beats_off" />
-
-        <ImageButton
-            android:id="@+id/imgBeat4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:src="@drawable/ic_beats_off" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/txtBeatsCount"
-        android:layout_width="wrap_content"
+    <Spinner
+        android:id="@+id/optBeatsPattern"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/strBeats"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:entries="@array/beatsPattern"
+        android:spinnerMode="dropdown" />
 
     <TextView
         android:id="@+id/txtBPM"
@@ -79,11 +46,11 @@
         android:textOff="Play"
         android:textOn="Stop" />
 
-    <Button
-        android:id="@+id/btnReset"
-        style="?android:attr/buttonStyleSmall"
+    <ToggleButton
+        android:id="@+id/btnScreenOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reset" />
+        android:textOff="Screen Off"
+        android:textOn="Screen On" />
 
 </LinearLayout>
