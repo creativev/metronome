@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 
 public class MainActivity extends ActionBarActivity implements BeatFragment.Callback {
 
@@ -24,6 +27,12 @@ public class MainActivity extends ActionBarActivity implements BeatFragment.Call
 
         beatsWidget = new BeatsWidget(this);
         beatsWidget.onCreate();
+
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        AdView adView = (AdView) findViewById(R.id.adView);
+        adView.loadAd(adRequest);
     }
 
     @Override
