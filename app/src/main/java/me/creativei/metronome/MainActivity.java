@@ -11,6 +11,7 @@ import android.widget.ToggleButton;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.analytics.GoogleAnalytics;
 
 
 public class MainActivity extends ActionBarActivity implements BeatFragment.Callback {
@@ -33,6 +34,9 @@ public class MainActivity extends ActionBarActivity implements BeatFragment.Call
                 .build();
         AdView adView = (AdView) findViewById(R.id.adView);
         adView.loadAd(adRequest);
+
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        analytics.newTracker(R.xml.tracker);
     }
 
     @Override
