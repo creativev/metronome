@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Metronome</string>
-    <string name="action_settings">Settings</string>
+    <string name="settings_screen_awake">Screen Awake</string>
     <string name="strBeats">4/4</string>
     <string name="strStart">Start</string>
     <string name="strBPM">50 BPM</string>

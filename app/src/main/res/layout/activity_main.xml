@@ -147,13 +147,6 @@
         android:textOff="Play"
         android:textOn="Stop" />
 
-    <ToggleButton
-        android:id="@+id/btnScreenOn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textOff="Screen Off"
-        android:textOn="Screen On" />
-
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="match_parent"

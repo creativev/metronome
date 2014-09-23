@@ -6,10 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ToggleButton;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -37,10 +35,8 @@ public class MainActivity extends ActionBarActivity {
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
             supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         }
+
         setContentView(R.layout.activity_main);
-        if (isInPortrait()) {
-            setupScreenOnButton();
-        }
 
         beatsWidget = new BeatsWidget(this);
         beatsWidget.onCreate();
@@ -95,44 +91,43 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        MenuItem screenAwakeOption = menu.findItem(R.id.menu_screen_awake);
+        boolean isScreenWakeOn = getAppStatePref().getBoolean(PREF_KEEP_SCREEN_ON, false);
+        setupScreenWakeMenu(screenAwakeOption, isScreenWakeOn);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.menu_screen_awake) {
+            boolean wasScreenWakeOn = item.isChecked();
+            boolean isScreenWakeOn = !wasScreenWakeOn;
+            saveScreenState(isScreenWakeOn);
+            setupScreenWakeMenu(item, isScreenWakeOn);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setupScreenWakeMenu(MenuItem item, boolean isScreenWakeOn) {
+        item.setChecked(isScreenWakeOn);
+        item.setIcon(isScreenWakeOn ? R.drawable.ic_screen_on : R.drawable.ic_screen_off);
+        if (isScreenWakeOn) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 
     private SharedPreferences getAppStatePref() {
         return getPreferences(MODE_PRIVATE);
     }
 
-    private void setupScreenOnButton() {
-        final ToggleButton screenOn = (ToggleButton) findViewById(R.id.btnScreenOn);
-        boolean keepScreenWake = getAppStatePref().getBoolean(PREF_KEEP_SCREEN_ON, false);
-        screenOn.setChecked(keepScreenWake);
-        screenOn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences preferences = getAppStatePref();
-                SharedPreferences.Editor editor = preferences.edit();
-                ToggleButton screenOnBtn = (ToggleButton) v;
-                editor.putBoolean(PREF_KEEP_SCREEN_ON, screenOnBtn.isChecked());
-                editor.apply();
-
-                if (screenOnBtn.isChecked())
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                else
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            }
-        });
-        if (keepScreenWake)
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        else
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    private void saveScreenState(boolean isChecked) {
+        SharedPreferences preferences = getAppStatePref();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(PREF_KEEP_SCREEN_ON, isChecked);
+        editor.apply();
     }
 }
