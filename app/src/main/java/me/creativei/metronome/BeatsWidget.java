@@ -12,9 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import java.lang.reflect.Field;
-
-public class BeatsWidget {
+public class BeatsWidget implements BeatFragment.Callback {
     public static final String PREF_BEATS_PATTERN_VAL = "PREF_BEATS_PATTERN_VAL";
     public static final String PREF_BPM_VAL = "PREF_BPM_VAL";
     private final int DEFAULT_BPM_VAL = 60;
@@ -22,7 +20,7 @@ public class BeatsWidget {
     private ToggleButton btnStart;
     private BeatFragment[] beatFragments = new BeatFragment[8];
     private SoundPool soundPool;
-    private int beatSound;
+    private int tick, tock;
     private BeatsTimer beatsTimer;
 
     private NumberWidget bpmWidget;
@@ -32,10 +30,11 @@ public class BeatsWidget {
         this.context = context;
 
         for (int i = 0; i < beatFragments.length; i++) {
-            beatFragments[i] = new BeatFragment(context, ((ImageButton) context.findViewById(getResourcesId("btnBeats" + (i + 1)))));
+            beatFragments[i] = new BeatFragment(this, ((ImageButton) context.findViewById(Utils.getResourcesId("btnBeats" + (i + 1)))));
         }
         soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-        beatSound = soundPool.load(context, R.raw.click, 1);
+        tick = soundPool.load(context, R.raw.tick, 1);
+        tock = soundPool.load(context, R.raw.tock, 1);
 
         if (context.isInPortrait()) {
             btnStart = (ToggleButton) context.findViewById(R.id.btnStart);
@@ -100,10 +99,6 @@ public class BeatsWidget {
         }
     }
 
-    public void beatPlayed() {
-        soundPool.play(beatSound, 1, 1, 1, 0, 1);
-    }
-
     public void onResume() {
         beatsTimer.resume();
     }
@@ -114,12 +109,18 @@ public class BeatsWidget {
 
     public void onSaveInstanceState(Bundle bundle) {
         Log.d(Constants.LOG_TAG, "onSave: Layout orientation portrait:" + context.isInPortrait());
+        for (BeatFragment beatFragment : beatFragments) {
+            beatFragment.onSaveInstanceState(bundle);
+        }
         beatsTimer.onSaveInstanceState(bundle);
     }
 
     public void onRestoreInstanceState(Bundle bundle) {
         Log.d(Constants.LOG_TAG, "onRestore: Layout orientation portrait:" + context.isInPortrait());
         // New layout is in portrait, restore btn state
+        for (BeatFragment beatFragment : beatFragments) {
+            beatFragment.onRestoreInstanceState(bundle);
+        }
         beatsTimer.onRestoreInstanceState(bundle);
         if (context.isInPortrait())
             btnStart.setChecked(beatsTimer.isRunning());
@@ -159,12 +160,13 @@ public class BeatsWidget {
         editor.apply();
     }
 
-    private int getResourcesId(String resourceId) {
-        try {
-            Field idField = R.id.class.getDeclaredField(resourceId);
-            return idField.getInt(idField);
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    public void tick() {
+        soundPool.play(tick, 1, 1, 1, 0, 1);
+    }
+
+    @Override
+    public void tock() {
+        soundPool.play(tock, 1, 1, 1, 0, 1);
     }
 }

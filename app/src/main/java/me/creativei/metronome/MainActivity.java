@@ -17,7 +17,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 
-public class MainActivity extends ActionBarActivity implements BeatFragment.Callback {
+public class MainActivity extends ActionBarActivity {
     public static final String PREF_KEEP_SCREEN_ON = "KEEP_SCREEN_ON";
     public static final String TEST_DEVICE = "D27BE559F36AC73AFA3ED3E64322B072";
     private BeatsWidget beatsWidget;
@@ -96,11 +96,6 @@ public class MainActivity extends ActionBarActivity implements BeatFragment.Call
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void beatPlayed() {
-        beatsWidget.beatPlayed();
     }
 
     private SharedPreferences getAppStatePref() {

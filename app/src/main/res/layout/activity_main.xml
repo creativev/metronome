@@ -16,64 +16,74 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="0"
             android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beats_on" />
+            android:src="@drawable/ic_beat_tick" />
 
         <ImageButton
             android:id="@+id/btnBeats2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="0"
             android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beats_on" />
+            android:src="@drawable/ic_beat_tock" />
 
         <ImageButton
             android:id="@+id/btnBeats3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+
+            android:background="0"
             android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beats_on" />
+            android:src="@drawable/ic_beat_tock" />
+
 
         <ImageButton
             android:id="@+id/btnBeats4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="0"
             android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beats_on" />
+            android:src="@drawable/ic_beat_tock" />
 
         <ImageButton
             android:id="@+id/btnBeats5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="0"
             android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beats_on" />
+            android:src="@drawable/ic_beat_tock" />
 
         <ImageButton
             android:id="@+id/btnBeats6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="0"
             android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beats_on" />
+            android:src="@drawable/ic_beat_tock" />
 
         <ImageButton
             android:id="@+id/btnBeats7"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="0"
             android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beats_on" />
+            android:src="@drawable/ic_beat_tock" />
 
         <ImageButton
             android:id="@+id/btnBeats8"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="0"
             android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beats_on" />
+            android:src="@drawable/ic_beat_tock" />
     </LinearLayout>
 
     <LinearLayout
