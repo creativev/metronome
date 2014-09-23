@@ -55,7 +55,7 @@ public class BeatFragment implements View.OnClickListener {
 
     public void hide() {
         state = BeatState.HIDDEN;
-        imageButton.setVisibility(View.INVISIBLE);
+        imageButton.setVisibility(View.GONE);
     }
 
     public static interface Callback {

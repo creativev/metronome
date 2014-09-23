@@ -1,6 +1,7 @@
 package me.creativei.metronome;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -17,7 +18,6 @@ import com.google.android.gms.analytics.Tracker;
 
 
 public class MainActivity extends ActionBarActivity implements BeatFragment.Callback {
-
     public static final String PREF_KEEP_SCREEN_ON = "KEEP_SCREEN_ON";
     public static final String TEST_DEVICE = "D27BE559F36AC73AFA3ED3E64322B072";
     private BeatsWidget beatsWidget;
@@ -28,7 +28,10 @@ public class MainActivity extends ActionBarActivity implements BeatFragment.Call
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setupScreenOnButton();
+        if (isInPortrait())
+            setupScreenOnButton();
+        else
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         beatsWidget = new BeatsWidget(this);
         beatsWidget.onCreate();
@@ -42,6 +45,10 @@ public class MainActivity extends ActionBarActivity implements BeatFragment.Call
 
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         tracker = analytics.newTracker(R.xml.tracker);
+    }
+
+    public boolean isInPortrait() {
+        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 
     @Override
@@ -76,10 +83,6 @@ public class MainActivity extends ActionBarActivity implements BeatFragment.Call
         this.onPause();
     }
 
-    private SharedPreferences getAppStatePref() {
-        return getPreferences(MODE_PRIVATE);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -98,6 +101,10 @@ public class MainActivity extends ActionBarActivity implements BeatFragment.Call
     @Override
     public void beatPlayed() {
         beatsWidget.beatPlayed();
+    }
+
+    private SharedPreferences getAppStatePref() {
+        return getPreferences(MODE_PRIVATE);
     }
 
     private void setupScreenOnButton() {
@@ -121,5 +128,7 @@ public class MainActivity extends ActionBarActivity implements BeatFragment.Call
         });
         if (keepScreenWake)
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        else
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }

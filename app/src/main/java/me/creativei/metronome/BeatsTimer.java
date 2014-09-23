@@ -10,6 +10,7 @@ import static me.creativei.metronome.Constants.LOG_TAG;
 
 public class BeatsTimer {
     public static final String BEATSTIMER_LASTRUN = "BEATSTIMER_LASTRUN";
+    public static final String BEATSTIMER_ISRUNNING = "BEATSTIMER_ISRUNNING";
     private int delay;
     private final TimerStateTask timerStateTask;
     private Timer timer;
@@ -70,12 +71,20 @@ public class BeatsTimer {
 
     }
 
+    public boolean isRunning() {
+        return isRunning;
+    }
+
     public void onRestoreInstanceState(Bundle bundle) {
         lastRun = bundle.getLong(BEATSTIMER_LASTRUN);
+        isRunning = bundle.getBoolean(BEATSTIMER_ISRUNNING);
+        timerStateTask.onRestoreInstanceState(bundle);
     }
 
     public void onSaveInstanceState(Bundle bundle) {
         bundle.putLong(BEATSTIMER_LASTRUN, lastRun);
+        bundle.putBoolean(BEATSTIMER_ISRUNNING, isRunning);
+        timerStateTask.onSaveInstanceState(bundle);
     }
 
     public void restoreRunningState(boolean isRunning) {

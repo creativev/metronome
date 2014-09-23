@@ -1,16 +1,19 @@
 package me.creativei.metronome;
 
 import android.app.Activity;
+import android.os.Bundle;
 
 import me.creativei.metronome.exception.NoBeatVisibleException;
 
 public class BeatsTimerStateTask implements TimerStateTask {
-    private int selected = -1;
+    public static final String BEATSTIMERTASK_SELECTED = "BEATSTIMERTASK_SELECTED";
+    public static final int SELECTED_NONE = -1;
+
+    private int selected = SELECTED_NONE;
     private Activity context;
     private BeatFragment[] beatFragments;
 
-    public BeatsTimerStateTask(Activity context, BeatFragment[] beatFragments, int selected) {
-        this.selected = selected;
+    public BeatsTimerStateTask(Activity context, BeatFragment[] beatFragments) {
         this.context = context;
         this.beatFragments = beatFragments;
     }
@@ -20,7 +23,7 @@ public class BeatsTimerStateTask implements TimerStateTask {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (selected == -1) {
+                if (selected == SELECTED_NONE) {
                     selected = nextVisibleBeatIndex(beatFragments, 0);
                 } else {
                     beatFragments[selected].fade();
@@ -37,9 +40,19 @@ public class BeatsTimerStateTask implements TimerStateTask {
             @Override
             public void run() {
                 beatFragments[selected].fade();
-                selected = -1;
+                selected = SELECTED_NONE;
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle bundle) {
+        bundle.putInt(BEATSTIMERTASK_SELECTED, selected);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle bundle) {
+        selected = bundle.getInt(BEATSTIMERTASK_SELECTED, SELECTED_NONE);
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -20,14 +21,15 @@ import me.creativei.listener.ContinuousLongClickListener;
 public class BeatsWidget {
     public static final String PREF_BEATS_PATTERN_VAL = "PREF_BEATS_PATTERN_VAL";
     public static final String PREF_BPM_VAL = "PREF_BPM_VAL";
+    private final int DEFAULT_BPM_VAL = 60;
     private MainActivity context;
-    private final ToggleButton btnStart;
-    private final Spinner beatsPatternOptions;
-    private final String[] beatsPattern;
+    private ToggleButton btnStart;
+    private Spinner beatsPatternOptions;
+    private String[] beatsPattern;
     private BeatFragment[] beatFragments = new BeatFragment[4];
     private TextView txtBpm;
-    private final Button btnUp;
-    private final Button btnDown;
+    private Button btnUp;
+    private Button btnDown;
     private SoundPool soundPool;
     private int beatSound;
     private BeatsTimer beatsTimer;
@@ -39,36 +41,30 @@ public class BeatsWidget {
         for (int i = 0; i < beatFragments.length; i++) {
             beatFragments[i] = new BeatFragment(context, ((ImageButton) context.findViewById(getResourcesId("btnBeats" + (i + 1)))));
         }
-
-        btnStart = (ToggleButton) context.findViewById(R.id.btnStart);
-        txtBpm = (TextView) context.findViewById(R.id.txtBPM);
-        btnUp = (Button) context.findViewById(R.id.btnBPMUp);
-        btnDown = (Button) context.findViewById(R.id.btnBPMDown);
-        beatsPatternOptions = (Spinner) context.findViewById(R.id.optBeatsPattern);
         soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         beatSound = soundPool.load(context, R.raw.click, 1);
+
+        if (context.isInPortrait()) {
+            btnStart = (ToggleButton) context.findViewById(R.id.btnStart);
+            txtBpm = (TextView) context.findViewById(R.id.txtBPM);
+            btnUp = (Button) context.findViewById(R.id.btnBPMUp);
+            btnDown = (Button) context.findViewById(R.id.btnBPMDown);
+            beatsPatternOptions = (Spinner) context.findViewById(R.id.optBeatsPattern);
+        }
     }
 
     public void onCreate() {
-        beatsTimer = new BeatsTimer(bpmToDelay(parseBpm()), new BeatsTimerStateTask(context, beatFragments, -1));
+        if (!context.isInPortrait()) {
+            beatsTimer = new BeatsTimer(bpmToDelay(savedBpm()), new BeatsTimerStateTask(context, beatFragments));
+            syncBeatsPatternWidget(savedBeatsPatternPosition());
+            return;
+        }
 
+        beatsTimer = new BeatsTimer(bpmToDelay(parseBpm()), new BeatsTimerStateTask(context, beatFragments));
         beatsPatternOptions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                saveBeatsPatternState(position);
-                String selectedPattern = beatsPattern[position];
-                int numberOfBeats = Integer.parseInt(selectedPattern.split("/")[0]);
-
-                for (int i = 0; i < beatFragments.length; i++) {
-                    BeatFragment beatFragment = beatFragments[i];
-                    if (i < numberOfBeats) {
-                        if (!beatFragment.isBeatVisible()) {
-                            beatFragment.show();
-                        }
-                    } else {
-                        beatFragment.hide();
-                    }
-                }
+                syncBeatsPatternWidget(position);
             }
 
             @Override
@@ -127,6 +123,27 @@ public class BeatsWidget {
                 updateBpm(finalBpm, beatsTimer);
             }
         });
+
+        // Restore App State from Pref
+        beatsPatternOptions.setSelection(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BEATS_PATTERN_VAL, 0));
+        updateBpm(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BPM_VAL, DEFAULT_BPM_VAL), beatsTimer);
+    }
+
+    private void syncBeatsPatternWidget(int position) {
+        saveBeatsPattern(position);
+        String selectedPattern = beatsPattern[position];
+        int numberOfBeats = Integer.parseInt(selectedPattern.split("/")[0]);
+
+        for (int i = 0; i < beatFragments.length; i++) {
+            BeatFragment beatFragment = beatFragments[i];
+            if (i < numberOfBeats) {
+                if (!beatFragment.isBeatVisible()) {
+                    beatFragment.show();
+                }
+            } else {
+                beatFragment.hide();
+            }
+        }
     }
 
     public void beatPlayed() {
@@ -142,17 +159,16 @@ public class BeatsWidget {
     }
 
     public void onSaveInstanceState(Bundle bundle) {
+        Log.d(Constants.LOG_TAG, "onSave: Layout orientation portrait:" + context.isInPortrait());
         beatsTimer.onSaveInstanceState(bundle);
     }
 
     public void onRestoreInstanceState(Bundle bundle) {
+        Log.d(Constants.LOG_TAG, "onRestore: Layout orientation portrait:" + context.isInPortrait());
+        // New layout is in portrait, restore btn state
         beatsTimer.onRestoreInstanceState(bundle);
-
-        // Restore App State from Pref
-        beatsPatternOptions.setSelection(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BEATS_PATTERN_VAL, 0));
-        updateBpm(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BPM_VAL, 60), beatsTimer);
-
-        beatsTimer.restoreRunningState(btnStart.isChecked());
+        if (context.isInPortrait())
+            btnStart.setChecked(beatsTimer.isRunning());
     }
 
     private int parseBpm() {
@@ -160,9 +176,7 @@ public class BeatsWidget {
     }
 
     private void updateBpm(int finalBpm, BeatsTimer beatsTimer) {
-        SharedPreferences.Editor editor = context.getPreferences(Context.MODE_PRIVATE).edit();
-        editor.putInt(PREF_BPM_VAL, finalBpm);
-        editor.apply();
+        saveBpm(finalBpm);
 
         txtBpm.setText(finalBpm + " BPM");
         beatsTimer.update(bpmToDelay(finalBpm));
@@ -172,7 +186,21 @@ public class BeatsWidget {
         return (int) (60.0 * 1000.0 / finalBpm);
     }
 
-    private void saveBeatsPatternState(int position) {
+    private int savedBpm() {
+        return context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BPM_VAL, DEFAULT_BPM_VAL);
+    }
+
+    private void saveBpm(int finalBpm) {
+        SharedPreferences.Editor editor = context.getPreferences(Context.MODE_PRIVATE).edit();
+        editor.putInt(PREF_BPM_VAL, finalBpm);
+        editor.apply();
+    }
+
+    private int savedBeatsPatternPosition() {
+        return context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BEATS_PATTERN_VAL, 0);
+    }
+
+    private void saveBeatsPattern(int position) {
         SharedPreferences appStatePref = context.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = appStatePref.edit();
         editor.putInt(PREF_BEATS_PATTERN_VAL, position);
