@@ -3,19 +3,17 @@ package me.creativei.metronome;
 import android.app.Activity;
 import android.os.Bundle;
 
-import me.creativei.metronome.exception.NoBeatVisibleException;
-
 public class BeatsTimerStateTask implements TimerStateTask {
     public static final String BEATSTIMERTASK_SELECTED = "BEATSTIMERTASK_SELECTED";
     public static final int SELECTED_NONE = -1;
 
     private int selected = SELECTED_NONE;
     private Activity context;
-    private BeatFragment[] beatFragments;
+    private BeatsVizWidget beatsVizWidget;
 
-    public BeatsTimerStateTask(Activity context, BeatFragment[] beatFragments) {
+    public BeatsTimerStateTask(Activity context, BeatsVizWidget beatsVizWidget) {
         this.context = context;
-        this.beatFragments = beatFragments;
+        this.beatsVizWidget = beatsVizWidget;
     }
 
     @Override
@@ -24,12 +22,12 @@ public class BeatsTimerStateTask implements TimerStateTask {
             @Override
             public void run() {
                 if (selected == SELECTED_NONE) {
-                    selected = nextVisibleBeatIndex(beatFragments, 0);
+                    selected = beatsVizWidget.nextVisibleBeatIndex(0);
                 } else {
-                    beatFragments[selected].fade();
-                    selected = nextVisibleBeatIndex(beatFragments, selected + 1);
+                    beatsVizWidget.fade(selected);
+                    selected = beatsVizWidget.nextVisibleBeatIndex(selected + 1);
                 }
-                beatFragments[selected].play();
+                beatsVizWidget.play(selected);
             }
         });
     }
@@ -39,7 +37,7 @@ public class BeatsTimerStateTask implements TimerStateTask {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                beatFragments[selected].fade();
+                beatsVizWidget.fade(selected);
                 selected = SELECTED_NONE;
             }
         });
@@ -60,17 +58,8 @@ public class BeatsTimerStateTask implements TimerStateTask {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                beatFragments[selected].fade();
+                beatsVizWidget.fade(selected);
             }
         });
-    }
-
-    private int nextVisibleBeatIndex(BeatFragment[] beatFragments1, int from) {
-        for (int i = 0; i < beatFragments1.length; i++) {
-            int index = (from + i) % beatFragments1.length;
-            BeatFragment beatFragment = beatFragments1[index];
-            if (beatFragment.isBeatVisible()) return index;
-        }
-        throw new NoBeatVisibleException();
     }
 }

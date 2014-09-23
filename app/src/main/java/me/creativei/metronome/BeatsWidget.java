@@ -2,25 +2,20 @@ package me.creativei.metronome;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-public class BeatsWidget implements BeatFragment.Callback {
+public class BeatsWidget {
     public static final String PREF_BEATS_PATTERN_VAL = "PREF_BEATS_PATTERN_VAL";
     public static final String PREF_BPM_VAL = "PREF_BPM_VAL";
     private final int DEFAULT_BPM_VAL = 60;
+    private final BeatsVizWidget beatsVizWidget;
     private MainActivity context;
     private ToggleButton btnStart;
-    private BeatFragment[] beatFragments = new BeatFragment[8];
-    private SoundPool soundPool;
-    private int tick, tock;
     private BeatsTimer beatsTimer;
 
     private NumberWidget bpmWidget;
@@ -29,13 +24,7 @@ public class BeatsWidget implements BeatFragment.Callback {
     public BeatsWidget(MainActivity context) {
         this.context = context;
 
-        for (int i = 0; i < beatFragments.length; i++) {
-            beatFragments[i] = new BeatFragment(this, ((ImageButton) context.findViewById(Utils.getResourcesId("btnBeats" + (i + 1)))));
-        }
-        soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-        tick = soundPool.load(context, R.raw.tick, 1);
-        tock = soundPool.load(context, R.raw.tock, 1);
-
+        beatsVizWidget = new BeatsVizWidget(context);
         if (context.isInPortrait()) {
             btnStart = (ToggleButton) context.findViewById(R.id.btnStart);
             TextView txtBpm = (TextView) context.findViewById(R.id.txtBPM);
@@ -64,11 +53,11 @@ public class BeatsWidget implements BeatFragment.Callback {
 
     public void onCreate() {
         if (!context.isInPortrait()) {
-            beatsTimer = new BeatsTimer(bpmToDelay(savedBpm()), new BeatsTimerStateTask(context, beatFragments));
+            beatsTimer = new BeatsTimer(bpmToDelay(savedBpm()), new BeatsTimerStateTask(context, beatsVizWidget));
             syncBeatsPatternWidget(savedBeatsPatternPosition());
             return;
         }
-        beatsTimer = new BeatsTimer(bpmToDelay(parseBpm()), new BeatsTimerStateTask(context, beatFragments));
+        beatsTimer = new BeatsTimer(bpmToDelay(parseBpm()), new BeatsTimerStateTask(context, beatsVizWidget));
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,16 +76,7 @@ public class BeatsWidget implements BeatFragment.Callback {
 
     private void syncBeatsPatternWidget(int numBeats) {
         saveBeatsPattern(numBeats);
-        for (int i = 0; i < beatFragments.length; i++) {
-            BeatFragment beatFragment = beatFragments[i];
-            if (i < numBeats) {
-                if (!beatFragment.isBeatVisible()) {
-                    beatFragment.show();
-                }
-            } else {
-                beatFragment.hide();
-            }
-        }
+        beatsVizWidget.sync(numBeats);
     }
 
     public void onResume() {
@@ -109,18 +89,14 @@ public class BeatsWidget implements BeatFragment.Callback {
 
     public void onSaveInstanceState(Bundle bundle) {
         Log.d(Constants.LOG_TAG, "onSave: Layout orientation portrait:" + context.isInPortrait());
-        for (BeatFragment beatFragment : beatFragments) {
-            beatFragment.onSaveInstanceState(bundle);
-        }
+        beatsVizWidget.onSaveInstanceState(bundle);
         beatsTimer.onSaveInstanceState(bundle);
     }
 
     public void onRestoreInstanceState(Bundle bundle) {
         Log.d(Constants.LOG_TAG, "onRestore: Layout orientation portrait:" + context.isInPortrait());
         // New layout is in portrait, restore btn state
-        for (BeatFragment beatFragment : beatFragments) {
-            beatFragment.onRestoreInstanceState(bundle);
-        }
+        beatsVizWidget.onRestoreInstanceState(bundle);
         beatsTimer.onRestoreInstanceState(bundle);
         if (context.isInPortrait())
             btnStart.setChecked(beatsTimer.isRunning());
@@ -160,13 +136,4 @@ public class BeatsWidget implements BeatFragment.Callback {
         editor.apply();
     }
 
-    @Override
-    public void tick() {
-        soundPool.play(tick, 1, 1, 1, 0, 1);
-    }
-
-    @Override
-    public void tock() {
-        soundPool.play(tock, 1, 1, 1, 0, 1);
-    }
 }
