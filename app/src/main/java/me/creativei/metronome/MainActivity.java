@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ToggleButton;
 
@@ -26,12 +27,20 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        if (isInPortrait())
-            setupScreenOnButton();
-        else
+        if (isInPortrait()) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            supportRequestWindowFeature(Window.FEATURE_ACTION_BAR);
+        } else {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        }
+        setContentView(R.layout.activity_main);
+        if (isInPortrait()) {
+            setupScreenOnButton();
+        }
 
         beatsWidget = new BeatsWidget(this);
         beatsWidget.onCreate();
