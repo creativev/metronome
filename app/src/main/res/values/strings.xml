@@ -8,14 +8,6 @@
     <string name="strBPM">50 BPM</string>
     <string name="strUp">+</string>
     <string name="strDown">-</string>
-
-    <string-array name="beatsPattern">
-        <item>1/4</item>
-        <item>2/4</item>
-        <item>3/4</item>
-        <item>4/4</item>
-    </string-array>
-
     <string name="ad_unit_id">ca-app-pub-6639475559641591/5701216669</string>
     <string name="msg_accs_beats_button">Beats State</string>
 </resources>

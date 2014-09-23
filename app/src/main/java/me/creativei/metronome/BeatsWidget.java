@@ -7,16 +7,12 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import java.lang.reflect.Field;
-
-import me.creativei.listener.ContinuousLongClickListener;
 
 public class BeatsWidget {
     public static final String PREF_BEATS_PATTERN_VAL = "PREF_BEATS_PATTERN_VAL";
@@ -24,20 +20,17 @@ public class BeatsWidget {
     private final int DEFAULT_BPM_VAL = 60;
     private MainActivity context;
     private ToggleButton btnStart;
-    private Spinner beatsPatternOptions;
-    private String[] beatsPattern;
-    private BeatFragment[] beatFragments = new BeatFragment[4];
-    private TextView txtBpm;
-    private Button btnUp;
-    private Button btnDown;
+    private BeatFragment[] beatFragments = new BeatFragment[8];
     private SoundPool soundPool;
     private int beatSound;
     private BeatsTimer beatsTimer;
 
+    private NumberWidget bpmWidget;
+    private NumberWidget beatsPatternWidget;
+
     public BeatsWidget(MainActivity context) {
         this.context = context;
 
-        beatsPattern = context.getResources().getStringArray(R.array.beatsPattern);
         for (int i = 0; i < beatFragments.length; i++) {
             beatFragments[i] = new BeatFragment(context, ((ImageButton) context.findViewById(getResourcesId("btnBeats" + (i + 1)))));
         }
@@ -46,10 +39,27 @@ public class BeatsWidget {
 
         if (context.isInPortrait()) {
             btnStart = (ToggleButton) context.findViewById(R.id.btnStart);
-            txtBpm = (TextView) context.findViewById(R.id.txtBPM);
-            btnUp = (Button) context.findViewById(R.id.btnBPMUp);
-            btnDown = (Button) context.findViewById(R.id.btnBPMDown);
-            beatsPatternOptions = (Spinner) context.findViewById(R.id.optBeatsPattern);
+            TextView txtBpm = (TextView) context.findViewById(R.id.txtBPM);
+            Button btnUp = (Button) context.findViewById(R.id.btnBPMUp);
+            Button btnDown = (Button) context.findViewById(R.id.btnBPMDown);
+            bpmWidget = new NumberWidget(txtBpm, btnUp, btnDown, true, 10, 300, "%d BPM", new NumberWidget.NumberWidgetValueChangeListener() {
+                @Override
+                public void valueChanged(int value) {
+                    updateBpm(value, beatsTimer);
+                }
+            });
+
+            TextView txtNumBeats = (TextView) context.findViewById(R.id.txtNumBeats);
+            Button btnNumBeatsUp = (Button) context.findViewById(R.id.btnNumBeatsUp);
+            Button btnNumBeatsDown = (Button) context.findViewById(R.id.btnNumBeatsDown);
+            beatsPatternWidget = new NumberWidget(txtNumBeats, btnNumBeatsUp, btnNumBeatsDown,
+                    false, 1, 8, "%d",
+                    new NumberWidget.NumberWidgetValueChangeListener() {
+                        @Override
+                        public void valueChanged(int value) {
+                            syncBeatsPatternWidget(value);
+                        }
+                    });
         }
     }
 
@@ -59,20 +69,7 @@ public class BeatsWidget {
             syncBeatsPatternWidget(savedBeatsPatternPosition());
             return;
         }
-
         beatsTimer = new BeatsTimer(bpmToDelay(parseBpm()), new BeatsTimerStateTask(context, beatFragments));
-        beatsPatternOptions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                syncBeatsPatternWidget(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,59 +81,16 @@ public class BeatsWidget {
             }
         });
 
-        ContinuousLongClickListener.setListener(btnUp, new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                int initialBpm = parseBpm();
-                int finalBpm = initialBpm - (initialBpm % 10) + 10;
-                updateBpm(finalBpm, beatsTimer);
-                return true;
-            }
-        });
-
-
-        btnUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int initialBpm = parseBpm();
-                int finalBpm = initialBpm + 1;
-                updateBpm(finalBpm, beatsTimer);
-            }
-        });
-
-        ContinuousLongClickListener.setListener(btnDown, new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                int initialBpm = parseBpm();
-                int sub = initialBpm % 10 == 0 ? 10 : initialBpm % 10;
-                int finalBpm = initialBpm - sub;
-                updateBpm(finalBpm, beatsTimer);
-                return true;
-            }
-        });
-
-        btnDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int initialBpm = parseBpm();
-                int finalBpm = initialBpm - 1;
-                updateBpm(finalBpm, beatsTimer);
-            }
-        });
-
         // Restore App State from Pref
-        beatsPatternOptions.setSelection(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BEATS_PATTERN_VAL, 0));
-        updateBpm(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BPM_VAL, DEFAULT_BPM_VAL), beatsTimer);
+        beatsPatternWidget.setValue(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BEATS_PATTERN_VAL, 0));
+        bpmWidget.setValue(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BPM_VAL, DEFAULT_BPM_VAL));
     }
 
-    private void syncBeatsPatternWidget(int position) {
-        saveBeatsPattern(position);
-        String selectedPattern = beatsPattern[position];
-        int numberOfBeats = Integer.parseInt(selectedPattern.split("/")[0]);
-
+    private void syncBeatsPatternWidget(int numBeats) {
+        saveBeatsPattern(numBeats);
         for (int i = 0; i < beatFragments.length; i++) {
             BeatFragment beatFragment = beatFragments[i];
-            if (i < numberOfBeats) {
+            if (i < numBeats) {
                 if (!beatFragment.isBeatVisible()) {
                     beatFragment.show();
                 }
@@ -172,13 +126,11 @@ public class BeatsWidget {
     }
 
     private int parseBpm() {
-        return Integer.parseInt(txtBpm.getText().toString().split(" ")[0]);
+        return bpmWidget.getValue();
     }
 
     private void updateBpm(int finalBpm, BeatsTimer beatsTimer) {
         saveBpm(finalBpm);
-
-        txtBpm.setText(finalBpm + " BPM");
         beatsTimer.update(bpmToDelay(finalBpm));
     }
 

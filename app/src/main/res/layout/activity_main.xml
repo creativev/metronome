@@ -42,14 +42,39 @@
             android:layout_weight="1"
             android:contentDescription="@string/msg_accs_beats_button"
             android:src="@drawable/ic_beats_on" />
-    </LinearLayout>
 
-    <Spinner
-        android:id="@+id/optBeatsPattern"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/beatsPattern"
-        android:spinnerMode="dropdown" />
+        <ImageButton
+            android:id="@+id/btnBeats5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/msg_accs_beats_button"
+            android:src="@drawable/ic_beats_on" />
+
+        <ImageButton
+            android:id="@+id/btnBeats6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/msg_accs_beats_button"
+            android:src="@drawable/ic_beats_on" />
+
+        <ImageButton
+            android:id="@+id/btnBeats7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/msg_accs_beats_button"
+            android:src="@drawable/ic_beats_on" />
+
+        <ImageButton
+            android:id="@+id/btnBeats8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/msg_accs_beats_button"
+            android:src="@drawable/ic_beats_on" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,11 +82,38 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnBPMUp"
+            android:id="@+id/btnNumBeatsDown"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strDown" />
+
+        <TextView
+            android:id="@+id/txtNumBeats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strBPM"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/btnNumBeatsUp"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/strUp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnBPMDown"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strDown" />
 
         <TextView
             android:id="@+id/txtBPM"
@@ -71,12 +123,11 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <Button
-            android:id="@+id/btnBPMDown"
+            android:id="@+id/btnBPMUp"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/strDown" />
-
+            android:text="@string/strUp" />
     </LinearLayout>
 
     <ToggleButton

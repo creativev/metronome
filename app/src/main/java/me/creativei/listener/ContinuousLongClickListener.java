@@ -15,7 +15,7 @@ public class ContinuousLongClickListener implements View.OnTouchListener, View.O
 
     public ContinuousLongClickListener(View view, View.OnLongClickListener onLongClickListener) {
         this.onLongClickListener = onLongClickListener;
-        delay = 750;
+        delay = 500;
         handler = new Handler();
         view.setOnLongClickListener(this);
         view.setOnTouchListener(this);
