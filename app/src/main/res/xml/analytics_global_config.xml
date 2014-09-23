@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <string name="ga_trackingId">UA-39102274-5</string>
+    <string name="ga_appName">Metronome and Tempo App</string>
+    <string name="ga_appVersion">1.0.0</string>
+    <string name="ga_logLevel">verbose</string>
+    <integer name="ga_dispatchPeriod">300</integer>
+    <bool name="ga_autoActivityTracking">true</bool>
+</resources>

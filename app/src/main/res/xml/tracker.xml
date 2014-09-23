@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <integer name="ga_sessionTimeout">600</integer>
-
-
-    <screenName name="me.creativei.metronome.MainActivity">Metronome Screen</screenName>
-
     <string name="ga_trackingId">UA-39102274-5</string>
-    <string name="ga_appName">Metronome and Tempo App</string>
-    <string name="ga_appVersion">1.0.0</string>
-    <integer name="ga_dispatchPeriod">300</integer>
-    <bool name="ga_autoActivityTracking">true</bool>
-
+    <integer name="ga_sessionTimeout">600</integer>
+    <screenName name="me.creativei.metronome.MainActivity">Metronome Screen</screenName>
 </resources>
