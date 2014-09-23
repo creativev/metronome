@@ -1,16 +1,11 @@
 package me.creativei.metronome;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import me.creativei.metronome.exception.InvisibleBeatPlayedException;
 
-public class BeatFragment extends Fragment implements View.OnClickListener {
+public class BeatFragment implements View.OnClickListener {
     private BeatState state;
     private Callback handler;
 
@@ -20,28 +15,11 @@ public class BeatFragment extends Fragment implements View.OnClickListener {
 
     private ImageButton imageButton;
 
-    public BeatFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        handler = (Callback) activity;
-        imageButton = new ImageButton(activity);
-        imageButton.setImageResource(R.drawable.ic_beats_on);
+    public BeatFragment(Callback handler, ImageButton imageButton) {
+        this.handler = handler;
+        this.imageButton = imageButton;
         imageButton.setOnClickListener(this);
         state = BeatState.ON;
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return imageButton;
     }
 
     @Override
@@ -72,10 +50,12 @@ public class BeatFragment extends Fragment implements View.OnClickListener {
 
     public void show() {
         state = BeatState.ON;
+        imageButton.setVisibility(View.VISIBLE);
     }
 
     public void hide() {
         state = BeatState.HIDDEN;
+        imageButton.setVisibility(View.INVISIBLE);
     }
 
     public static interface Callback {

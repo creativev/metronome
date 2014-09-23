@@ -17,4 +17,5 @@
     </string-array>
 
     <string name="ad_unit_id">ca-app-pub-6639475559641591/5701216669</string>
+    <string name="msg_accs_beats_button">Beats State</string>
 </resources>

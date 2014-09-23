@@ -7,10 +7,42 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:id="@+id/beatsPatternContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" />
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnBeats1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/msg_accs_beats_button"
+            android:src="@drawable/ic_beats_on" />
+
+        <ImageButton
+            android:id="@+id/btnBeats2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/msg_accs_beats_button"
+            android:src="@drawable/ic_beats_on" />
+
+        <ImageButton
+            android:id="@+id/btnBeats3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/msg_accs_beats_button"
+            android:src="@drawable/ic_beats_on" />
+
+        <ImageButton
+            android:id="@+id/btnBeats4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/msg_accs_beats_button"
+            android:src="@drawable/ic_beats_on" />
+    </LinearLayout>
 
     <Spinner
         android:id="@+id/optBeatsPattern"
@@ -19,26 +51,33 @@
         android:entries="@array/beatsPattern"
         android:spinnerMode="dropdown" />
 
-    <TextView
-        android:id="@+id/txtBPM"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/strBPM"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btnBPMUp"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/strUp" />
+        <Button
+            android:id="@+id/btnBPMUp"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strUp" />
 
-    <Button
-        android:id="@+id/btnBPMDown"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/strDown" />
+        <TextView
+            android:id="@+id/txtBPM"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strBPM"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/btnBPMDown"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strDown" />
+
+    </LinearLayout>
 
     <ToggleButton
         android:id="@+id/btnStart"
@@ -58,6 +97,6 @@
         android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        ads:adSize="BANNER"
+        ads:adSize="SMART_BANNER"
         ads:adUnitId="@string/ad_unit_id" />
 </LinearLayout>

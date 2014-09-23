@@ -3,7 +3,6 @@ package me.creativei.metronome;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,8 +45,9 @@ public class MainActivity extends ActionBarActivity implements BeatFragment.Call
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        beatsWidget.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
@@ -62,6 +62,12 @@ public class MainActivity extends ActionBarActivity implements BeatFragment.Call
     protected void onPause() {
         super.onPause();
         beatsWidget.onPause();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        beatsWidget.onSaveInstanceState(outState);
     }
 
     @Override

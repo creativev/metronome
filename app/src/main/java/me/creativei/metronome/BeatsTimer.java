@@ -1,5 +1,6 @@
 package me.creativei.metronome;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import java.util.Timer;
@@ -8,6 +9,7 @@ import java.util.TimerTask;
 import static me.creativei.metronome.Constants.LOG_TAG;
 
 public class BeatsTimer {
+    public static final String BEATSTIMER_LASTRUN = "BEATSTIMER_LASTRUN";
     private int delay;
     private final TimerStateTask timerStateTask;
     private Timer timer;
@@ -29,7 +31,8 @@ public class BeatsTimer {
         this.delay = delay;
         Log.d(LOG_TAG, "Current delay is " + delay);
         if (isRunning) {
-            timer.cancel();
+            if (timer != null)
+                timer.cancel();
             long initialDelay = Math.max(0, delay - (System.currentTimeMillis() - lastRun));
             timer = new Timer(true);
             timer.scheduleAtFixedRate(newTimerTask(), (int) initialDelay, delay);
@@ -65,5 +68,17 @@ public class BeatsTimer {
             timerStateTask.runPauseTask();
         }
 
+    }
+
+    public void onRestoreInstanceState(Bundle bundle) {
+        lastRun = bundle.getLong(BEATSTIMER_LASTRUN);
+    }
+
+    public void onSaveInstanceState(Bundle bundle) {
+        bundle.putLong(BEATSTIMER_LASTRUN, lastRun);
+    }
+
+    public void restoreRunningState(boolean isRunning) {
+        this.isRunning = isRunning;
     }
 }
