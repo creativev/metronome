@@ -6,6 +6,7 @@
     <string name="strBeats">4/4</string>
     <string name="strStart">Start</string>
     <string name="strBPM">50 BPM</string>
+    <string name="strNumBeats">4</string>
     <string name="strUp">+</string>
     <string name="strDown">-</string>
     <string name="ad_unit_id">ca-app-pub-6639475559641591/5701216669</string>
