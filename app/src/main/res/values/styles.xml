@@ -6,14 +6,14 @@
     </style>
 
     <style name="Widget.Button.Toggle" parent="android:Widget">
-        <item name="android:background">@drawable/ic_toggle_bg</item>
         <item name="android:disabledAlpha">?android:attr/disabledAlpha</item>
     </style>
 
     <style name="toggleButton" parent="@android:Theme.Black">
         <item name="android:buttonStyleToggle">@style/Widget.Button.Toggle</item>
-        <item name="android:textOn"></item>
-        <item name="android:textOff"></item>
+        <item name="android:textOff">\uF04B</item>
+        <item name="android:textOn">\uF04D</item>
+        <item name="android:background">@null</item>
     </style>
 
     <style name="style_beats">
@@ -40,6 +40,20 @@
     </style>
 
     <style name="style_btn_face" parent="@android:attr/buttonStyleSmall">
-        <item name="android:textColor">#AF301A</item>
+        <item name="android:background">@null</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">100sp</item>
+    </style>
+
+    <style name="style_bpm_btn" parent="@android:attr/buttonStyleSmall">
+        <item name="android:background">@null</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">50sp</item>
     </style>
 </resources>

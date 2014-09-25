@@ -2,6 +2,7 @@ package me.creativei.metronome;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,32 +24,41 @@ public class BeatsWidget {
 
     public BeatsWidget(MainActivity context) {
         this.context = context;
-
         beatsVizWidget = new BeatsVizWidget(context);
-        if (context.isInPortrait()) {
-            btnStart = (ToggleButton) context.findViewById(R.id.btnStart);
-            TextView txtBpm = (TextView) context.findViewById(R.id.txtBPM);
-            Button btnUp = (Button) context.findViewById(R.id.btnBPMUp);
-            Button btnDown = (Button) context.findViewById(R.id.btnBPMDown);
-            bpmWidget = new NumberWidget(txtBpm, btnUp, btnDown, true, 10, 300, "%d BPM", new NumberWidget.NumberWidgetValueChangeListener() {
-                @Override
-                public void valueChanged(int value) {
-                    updateBpm(value, beatsTimer);
-                }
-            });
+        if (!context.isInPortrait()) return;
 
-            TextView txtNumBeats = (TextView) context.findViewById(R.id.txtNumBeats);
-            Button btnNumBeatsUp = (Button) context.findViewById(R.id.btnNumBeatsUp);
-            Button btnNumBeatsDown = (Button) context.findViewById(R.id.btnNumBeatsDown);
-            beatsPatternWidget = new NumberWidget(txtNumBeats, btnNumBeatsUp, btnNumBeatsDown,
-                    false, 1, beatsVizWidget.length, "%d",
-                    new NumberWidget.NumberWidgetValueChangeListener() {
-                        @Override
-                        public void valueChanged(int value) {
-                            syncBeatsPatternWidget(value);
-                        }
-                    });
-        }
+        btnStart = (ToggleButton) context.findViewById(R.id.btnStart);
+        Typeface fontAwesome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
+        btnStart.setTypeface(fontAwesome);
+        btnStart.setTextColor(context.getResources().getColor(R.color.green_dark));
+
+        Typeface fontCabin = Typeface.createFromAsset(context.getAssets(), "fonts/Cabin-Regular.ttf");
+        TextView txtBpm = (TextView) context.findViewById(R.id.txtBPM);
+        txtBpm.setTypeface(fontCabin);
+        Button btnUp = (Button) context.findViewById(R.id.btnBPMUp);
+        Button btnDown = (Button) context.findViewById(R.id.btnBPMDown);
+        btnUp.setTypeface(fontAwesome);
+        btnDown.setTypeface(fontAwesome);
+        bpmWidget = new NumberWidget(txtBpm, btnUp, btnDown, true, 10, 300, "%d BPM", new NumberWidget.NumberWidgetValueChangeListener() {
+            @Override
+            public void valueChanged(int value) {
+                updateBpm(value, beatsTimer);
+            }
+        });
+
+        TextView txtNumBeats = (TextView) context.findViewById(R.id.txtNumBeats);
+        Button btnNumBeatsUp = (Button) context.findViewById(R.id.btnNumBeatsUp);
+        Button btnNumBeatsDown = (Button) context.findViewById(R.id.btnNumBeatsDown);
+        btnNumBeatsDown.setTypeface(fontAwesome);
+        btnNumBeatsUp.setTypeface(fontAwesome);
+        beatsPatternWidget = new NumberWidget(txtNumBeats, btnNumBeatsUp, btnNumBeatsDown,
+                false, 1, beatsVizWidget.length, "%d",
+                new NumberWidget.NumberWidgetValueChangeListener() {
+                    @Override
+                    public void valueChanged(int value) {
+                        syncBeatsPatternWidget(value);
+                    }
+                });
     }
 
     public void onCreate() {
@@ -63,8 +73,10 @@ public class BeatsWidget {
             public void onClick(View v) {
                 if (btnStart.isChecked()) {
                     beatsTimer.start();
+                    btnStart.setTextColor(context.getResources().getColor(R.color.red_dark));
                 } else {
                     beatsTimer.stop();
+                    btnStart.setTextColor(context.getResources().getColor(R.color.green_dark));
                 }
             }
         });

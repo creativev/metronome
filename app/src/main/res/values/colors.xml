@@ -3,4 +3,6 @@
     <color name="color_beats_bg">#FC5B3F</color>
     <color name="color_btn_face">#AF301A</color>
     <color name="color_beat_fill">#FCB03C</color>
+    <color name="green_dark">#ff669900</color>
+    <color name="red_dark">#ffcc0000</color>
 </resources>

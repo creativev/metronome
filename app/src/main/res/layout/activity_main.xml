@@ -88,12 +88,8 @@
         <Button
             android:id="@+id/btnNumBeatsDown"
             style="@style/style_btn_face"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/color_btn_face"
-            android:gravity="center"
-            android:text="@string/strDown" />
+            android:text="@string/strDown"
+            android:textColor="@color/red_dark" />
 
         <TextView
             android:id="@+id/txtNumBeats"
@@ -107,11 +103,9 @@
 
         <Button
             android:id="@+id/btnNumBeatsUp"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/strUp" />
+            style="@style/style_btn_face"
+            android:text="@string/strUp"
+            android:textColor="@color/green_dark" />
     </LinearLayout>
 
     <LinearLayout
@@ -125,32 +119,29 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnBPMDown"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/strDown" />
-
-            <TextView
-                android:id="@+id/txtBPM"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/strBPM"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/btnBPMUp"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                style="@style/style_bpm_btn"
+                android:text="@string/strArrowUp"
+                android:textColor="@color/green_dark" />
+
+            <TextView
+                android:id="@+id/txtBPM"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/strUp" />
+                android:gravity="center"
+                android:text="@string/strBPM"
+                android:textSize="36sp"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <Button
+                android:id="@+id/btnBPMDown"
+                style="@style/style_bpm_btn"
+                android:text="@string/strArrowDown"
+                android:textColor="@color/red_dark" />
         </LinearLayout>
 
         <ToggleButton
@@ -159,7 +150,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/ic_toggle_bg" />
+            android:textSize="100sp" />
     </LinearLayout>
 
     <com.google.android.gms.ads.AdView
