@@ -82,11 +82,11 @@ public class BeatFragment implements View.OnClickListener {
         } else if (state == BeatState.TOCK) {
             handler.tock();
         }
-        imageButton.setImageResource(R.drawable.beat_glow);
+        imageButton.setBackgroundResource(R.drawable.ic_beat_glow_bg);
     }
 
     public void fade() {
-        imageButton.setImageResource(R.drawable.beat);
+        imageButton.setBackgroundResource(R.drawable.ic_beat_bg);
     }
 
     public boolean isBeatVisible() {
