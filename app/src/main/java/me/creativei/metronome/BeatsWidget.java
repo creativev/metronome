@@ -110,8 +110,12 @@ public class BeatsWidget {
         // New layout is in portrait, restore btn state
         beatsVizWidget.onRestoreInstanceState(bundle);
         beatsTimer.onRestoreInstanceState(bundle);
-        if (context.isInPortrait())
+        if (context.isInPortrait()) {
             btnStart.setChecked(beatsTimer.isRunning());
+            if (beatsTimer.isRunning()) {
+                btnStart.setTextColor(context.getResources().getColor(R.color.red_dark));
+            }
+        }
     }
 
     private int parseBpm() {

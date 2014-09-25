@@ -22,9 +22,9 @@ public class BeatFragment implements View.OnClickListener {
         }, TOCK {
             @Override
             public BeatState next() {
-                return MUTED;
+                return MUTE;
             }
-        }, MUTED {
+        }, MUTE {
             @Override
             public BeatState next() {
                 return TICK;
@@ -66,7 +66,7 @@ public class BeatFragment implements View.OnClickListener {
         this.handler = handler;
         this.imageButton = imageButton;
         this.imageButton.setOnClickListener(this);
-        state = BeatState.TOCK;
+        state = BeatState.TICK;
     }
 
     @Override
@@ -82,11 +82,11 @@ public class BeatFragment implements View.OnClickListener {
         } else if (state == BeatState.TOCK) {
             handler.tock();
         }
-        imageButton.setBackgroundResource(R.drawable.ic_beat_glow_bg);
+        updateImageWithState(state, true);
     }
 
     public void fade() {
-        imageButton.setBackgroundResource(R.drawable.ic_beat_bg);
+        updateImageWithState(state, false);
     }
 
     public boolean isBeatVisible() {
@@ -116,7 +116,13 @@ public class BeatFragment implements View.OnClickListener {
 
     private void updateImageButton(BeatState state) {
         this.state = state;
-        imageButton.setImageResource(Utils.getResource("ic_beat_" + state.toString().toLowerCase(), R.drawable.class));
+        updateImageWithState(state, false);
+    }
+
+    private void updateImageWithState(BeatState state, boolean glow) {
+        String resourceId = "beat_" + state.toString().toLowerCase();
+        resourceId = glow ? resourceId + "_glow" : resourceId;
+        imageButton.setImageResource(Utils.getResource(resourceId, R.drawable.class));
     }
 
     private void setInvisible(boolean val) {

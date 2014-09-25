@@ -1,6 +1,5 @@
 package me.creativei.metronome;
 
-import android.app.Activity;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -11,13 +10,15 @@ import android.widget.LinearLayout;
 import me.creativei.metronome.exception.NoBeatVisibleException;
 
 public class BeatsVizWidget implements BeatFragment.Callback {
-    private final LinearLayout[] containers;
+    private MainActivity context;
+    private LinearLayout[] containers;
     private BeatFragment[] beatFragments = new BeatFragment[12];
     private SoundPool soundPool;
     private int tick, tock;
     public int length = beatFragments.length;
 
-    public BeatsVizWidget(Activity context) {
+    public BeatsVizWidget(MainActivity context) {
+        this.context = context;
         for (int i = 0; i < beatFragments.length; i++) {
             beatFragments[i] = new BeatFragment(this, ((ImageButton) context.findViewById(Utils.getResourcesId("btnBeats" + (i + 1)))));
         }
@@ -29,11 +30,6 @@ public class BeatsVizWidget implements BeatFragment.Callback {
                 (LinearLayout) context.findViewById(R.id.beatsVizContainer2),
                 (LinearLayout) context.findViewById(R.id.beatsVizContainer3)
         };
-    }
-
-    @SuppressWarnings("unused - test constructor")
-    BeatsVizWidget(LinearLayout[] containers) {
-        this.containers = containers;
     }
 
     @Override
@@ -78,12 +74,12 @@ public class BeatsVizWidget implements BeatFragment.Callback {
     }
 
     private void animateRows(int numBeats) {
-        int visibleRows = (int) Math.ceil(numBeats / 4.0);
+        double beatsPerRow = context.isInPortrait() ? 4.0 : 6.0;
+        int visibleRows = (int) Math.ceil(numBeats / beatsPerRow);
         for (int currentRow = 1; currentRow <= containers.length; currentRow++) {
             LinearLayout container = containers[currentRow - 1];
             if (currentRow <= visibleRows && container.getVisibility() != View.VISIBLE) {
                 container.setVisibility(View.VISIBLE);
-
             } else if (currentRow > visibleRows && container.getVisibility() != View.GONE) {
                 container.setVisibility(View.GONE);
             }
