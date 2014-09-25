@@ -41,7 +41,7 @@ public class BeatsWidget {
             Button btnNumBeatsUp = (Button) context.findViewById(R.id.btnNumBeatsUp);
             Button btnNumBeatsDown = (Button) context.findViewById(R.id.btnNumBeatsDown);
             beatsPatternWidget = new NumberWidget(txtNumBeats, btnNumBeatsUp, btnNumBeatsDown,
-                    false, 1, 8, "%d",
+                    false, 1, beatsVizWidget.length, "%d",
                     new NumberWidget.NumberWidgetValueChangeListener() {
                         @Override
                         public void valueChanged(int value) {
@@ -70,7 +70,7 @@ public class BeatsWidget {
         });
 
         // Restore App State from Pref
-        beatsPatternWidget.setValue(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BEATS_PATTERN_VAL, 0));
+        beatsPatternWidget.setValue(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BEATS_PATTERN_VAL, 4));
         bpmWidget.setValue(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BPM_VAL, DEFAULT_BPM_VAL));
     }
 
@@ -126,7 +126,7 @@ public class BeatsWidget {
     }
 
     private int savedBeatsPatternPosition() {
-        return context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BEATS_PATTERN_VAL, 0);
+        return context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BEATS_PATTERN_VAL, 4);
     }
 
     private void saveBeatsPattern(int position) {

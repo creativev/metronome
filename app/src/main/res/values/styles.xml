@@ -17,6 +17,29 @@
     </style>
 
     <style name="style_beats">
-        <item name="android:padding">10dp</item>
+        <item name="android:background">@null</item>
+        <item name="android:src">@drawable/beat</item>
+        <item name="android:contentDescription">@string/msg_accs_beats_button</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:outAnimation">@anim/anim_collapse</item>
+        <item name="android:inAnimation">@anim/anim_expand</item>
+    </style>
+
+    <style name="style_beats_container">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:animateLayoutChanges">true</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="style_btn_face" parent="@android:attr/buttonStyleSmall">
+        <item name="android:textColor">#AF301A</item>
     </style>
 </resources>

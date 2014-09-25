@@ -3,147 +3,79 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="0dp"
-        android:layout_weight="1"
-        android:background="@color/color_beats_bg"
-        android:orientation="horizontal"
-        android:padding="0dp">
+        android:layout_weight="3"
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/btnBeats1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            style="@style/style_beats"
-            android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beat_base" />
+        <LinearLayout
+            android:id="@+id/beatsVizContainer1"
+            style="@style/style_beats_container">
 
-        <ImageButton
-            android:id="@+id/btnBeats2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beat_base" />
+            <ImageButton
+                android:id="@+id/btnBeats1"
+                style="@style/style_beats" />
 
-        <ImageButton
-            android:id="@+id/btnBeats3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            <ImageButton
+                android:id="@+id/btnBeats2"
+                style="@style/style_beats" />
 
-            android:background="@null"
-            android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beat_base" />
+            <ImageButton
+                android:id="@+id/btnBeats3"
+                style="@style/style_beats" />
 
-        <ImageButton
-            android:id="@+id/btnBeats4"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beat_base" />
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/btnBeats4"
+                style="@style/style_beats" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="0dp"
-        android:layout_weight="1"
-        android:background="@color/color_beats_bg"
-        android:orientation="horizontal"
-        android:padding="0dp">
+        <LinearLayout
+            android:id="@+id/beatsVizContainer2"
+            style="@style/style_beats_container">
 
-        <ImageButton
-            android:id="@+id/btnBeats5"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beat_base" />
+            <ImageButton
+                android:id="@+id/btnBeats5"
+                style="@style/style_beats" />
 
-        <ImageButton
-            android:id="@+id/btnBeats6"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beat_base" />
+            <ImageButton
+                android:id="@+id/btnBeats6"
+                style="@style/style_beats" />
 
-        <ImageButton
-            android:id="@+id/btnBeats7"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beat_base" />
+            <ImageButton
+                android:id="@+id/btnBeats7"
+                style="@style/style_beats" />
 
-        <ImageButton
-            android:id="@+id/btnBeats8"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beat_base" />
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/btnBeats8"
+                style="@style/style_beats" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="0dp"
-        android:layout_weight="1"
-        android:background="@color/color_beats_bg"
-        android:orientation="horizontal"
-        android:padding="0dp">
+        <LinearLayout
+            android:id="@+id/beatsVizContainer3"
+            style="@style/style_beats_container">
 
-        <ImageButton
-            android:id="@+id/btnBeats9"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beat_base" />
+            <ImageButton
+                android:id="@+id/btnBeats9"
+                style="@style/style_beats" />
 
-        <ImageButton
-            android:id="@+id/btnBeats10"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beat_base" />
+            <ImageButton
+                android:id="@+id/btnBeats10"
+                style="@style/style_beats" />
 
-        <ImageButton
-            android:id="@+id/btnBeats11"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beat_base" />
+            <ImageButton
+                android:id="@+id/btnBeats11"
+                style="@style/style_beats" />
 
-        <ImageButton
-            android:id="@+id/btnBeats12"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription="@string/msg_accs_beats_button"
-            android:src="@drawable/ic_beat_base" />
+            <ImageButton
+                android:id="@+id/btnBeats12"
+                style="@style/style_beats" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -155,10 +87,11 @@
 
         <Button
             android:id="@+id/btnNumBeatsDown"
-            style="?android:attr/buttonStyleSmall"
+            style="@style/style_btn_face"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@color/color_btn_face"
             android:gravity="center"
             android:text="@string/strDown" />
 

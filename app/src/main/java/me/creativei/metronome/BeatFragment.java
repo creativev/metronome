@@ -82,11 +82,11 @@ public class BeatFragment implements View.OnClickListener {
         } else if (state == BeatState.TOCK) {
             handler.tock();
         }
-        imageButton.setBackgroundResource(R.drawable.ic_beat_glow);
+        imageButton.setImageResource(R.drawable.beat_glow);
     }
 
     public void fade() {
-        imageButton.setBackgroundResource(0);
+        imageButton.setImageResource(R.drawable.beat);
     }
 
     public boolean isBeatVisible() {
@@ -94,17 +94,17 @@ public class BeatFragment implements View.OnClickListener {
     }
 
     public void show() {
-        updateVisibility(false);
+        setInvisible(false);
     }
 
     public void hide() {
-        updateVisibility(true);
+        setInvisible(true);
     }
 
     public void onRestoreInstanceState(Bundle bundle) {
         Bundle savedState = bundle.getBundle(Integer.toString(imageButton.getId()));
         updateImageButton((BeatState) savedState.getParcelable(BEAT_STATE));
-        updateVisibility(savedState.getBoolean(BEAT_HIDDEN));
+        setInvisible(savedState.getBoolean(BEAT_HIDDEN));
     }
 
     public void onSaveInstanceState(Bundle bundle) {
@@ -119,7 +119,7 @@ public class BeatFragment implements View.OnClickListener {
         imageButton.setImageResource(Utils.getResource("ic_beat_" + state.toString().toLowerCase(), R.drawable.class));
     }
 
-    private void updateVisibility(boolean val) {
+    private void setInvisible(boolean val) {
         hidden = val;
         imageButton.setVisibility(val ? View.GONE : View.VISIBLE);
     }
