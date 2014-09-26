@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
@@ -16,7 +15,6 @@ public class BeatsVizLayout extends LinearLayout {
     private Context context;
     private LinearLayout[] containers;
     private BeatButton[] beatButtons = new BeatButton[12];
-    public int length = beatButtons.length;
     private int visible = 0;
 
     public BeatsVizLayout(Context context, AttributeSet attrs) {
@@ -26,7 +24,7 @@ public class BeatsVizLayout extends LinearLayout {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         for (int i = 0; i < beatButtons.length; i++) {
             beatButtons[i] = (BeatButton) layoutInflater.inflate(R.layout.beat_button, null);
-            beatButtons[i].init(soundPlayer);
+            beatButtons[i].init(context, i, soundPlayer);
         }
         containers = new LinearLayout[numRows()];
         for (int i = 0; i < numRows(); i++) {

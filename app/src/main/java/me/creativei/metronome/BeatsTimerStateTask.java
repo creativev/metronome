@@ -1,19 +1,20 @@
 package me.creativei.metronome;
 
 import android.app.Activity;
-import android.os.Bundle;
 
 public class BeatsTimerStateTask implements TimerStateTask {
-    public static final String BEATSTIMERTASK_SELECTED = "BEATSTIMERTASK_SELECTED";
     public static final int SELECTED_NONE = -1;
-
     private int selected = SELECTED_NONE;
     private Activity context;
-    private BeatsVizLayout beatsVizLayout;
+    private Callback callback;
 
-    public BeatsTimerStateTask(Activity context, BeatsVizLayout beatsVizLayout) {
+    public BeatsTimerStateTask(Activity context, Callback callback) {
         this.context = context;
-        this.beatsVizLayout = beatsVizLayout;
+        this.callback = callback;
+    }
+
+    public synchronized void setCallback(Callback callback) {
+        this.callback = callback;
     }
 
     @Override
@@ -22,12 +23,12 @@ public class BeatsTimerStateTask implements TimerStateTask {
             @Override
             public void run() {
                 if (selected == SELECTED_NONE) {
-                    selected = beatsVizLayout.nextVisibleBeatIndex(0);
+                    selected = callback.nextVisibleBeatIndex(0);
                 } else {
-                    beatsVizLayout.fade(selected);
-                    selected = beatsVizLayout.nextVisibleBeatIndex(selected + 1);
+                    callback.fade(selected);
+                    selected = callback.nextVisibleBeatIndex(selected + 1);
                 }
-                beatsVizLayout.play(selected);
+                callback.play(selected);
             }
         });
     }
@@ -37,20 +38,10 @@ public class BeatsTimerStateTask implements TimerStateTask {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                beatsVizLayout.fade(selected);
+                callback.fade(selected);
                 selected = SELECTED_NONE;
             }
         });
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle bundle) {
-        bundle.putInt(BEATSTIMERTASK_SELECTED, selected);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle bundle) {
-        selected = bundle.getInt(BEATSTIMERTASK_SELECTED, SELECTED_NONE);
     }
 
     @Override
@@ -58,8 +49,16 @@ public class BeatsTimerStateTask implements TimerStateTask {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                beatsVizLayout.fade(selected);
+                callback.fade(selected);
             }
         });
+    }
+
+    public static interface Callback {
+        public int nextVisibleBeatIndex(int from);
+
+        public void play(int i);
+
+        public void fade(int i);
     }
 }

@@ -16,14 +16,12 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 
-public class MainActivity extends ActionBarActivity implements BeatsTimer.Callback, BpmFragment.Callback, NumBeatFragment.Callback {
+public class MainActivity extends ActionBarActivity implements BeatsTimerStateTask.Callback, BpmFragment.Callback, NumBeatFragment.Callback {
     public static final String PREF_KEEP_SCREEN_ON = "KEEP_SCREEN_ON";
     public static final String TEST_DEVICE = "D27BE559F36AC73AFA3ED3E64322B072";
     private static final String TAG_TASK_FRAGMENT = "task_fragment";
     private BeatsVizLayout beatsVizLayout;
-    private BpmFragment bpmFragment;
     private BeatsTimer beatsTimer;
-    private PlayButton btnStart;
     private Tracker tracker;
 
     @Override
@@ -48,9 +46,8 @@ public class MainActivity extends ActionBarActivity implements BeatsTimer.Callba
             fragmentManager.beginTransaction().add(beatsTimer, TAG_TASK_FRAGMENT).commit();
         }
 
-        btnStart = (PlayButton) findViewById(R.id.btnStart);
+        PlayButton btnStart = (PlayButton) findViewById(R.id.btnStart);
         btnStart.init(beatsTimer);
-        bpmFragment = (BpmFragment) fragmentManager.findFragmentById(R.id.bpmContainer);
 
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
@@ -73,10 +70,17 @@ public class MainActivity extends ActionBarActivity implements BeatsTimer.Callba
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        beatsTimer.pause();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         tracker.setScreenName("me.creativei.metronome.MainActivity");
         tracker.send(new HitBuilders.AppViewBuilder().build());
+        beatsTimer.resume();
     }
 
     @Override
@@ -125,16 +129,6 @@ public class MainActivity extends ActionBarActivity implements BeatsTimer.Callba
     }
 
     @Override
-    public TimerStateTask getTimerStateTask() {
-        return new BeatsTimerStateTask(this, beatsVizLayout);
-    }
-
-    @Override
-    public int getDelay() {
-        return bpmToDelay(bpmFragment.getBpm());
-    }
-
-    @Override
     public void bpmChanged(int value) {
         beatsTimer.update(bpmToDelay(value));
     }
@@ -146,5 +140,20 @@ public class MainActivity extends ActionBarActivity implements BeatsTimer.Callba
 
     private int bpmToDelay(int finalBpm) {
         return (int) (60.0 * 1000.0 / finalBpm);
+    }
+
+    @Override
+    public int nextVisibleBeatIndex(int from) {
+        return beatsVizLayout.nextVisibleBeatIndex(from);
+    }
+
+    @Override
+    public void play(int i) {
+        beatsVizLayout.play(i);
+    }
+
+    @Override
+    public void fade(int i) {
+        beatsVizLayout.fade(i);
     }
 }

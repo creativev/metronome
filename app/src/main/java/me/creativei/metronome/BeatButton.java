@@ -9,6 +9,10 @@ import android.view.View;
 import android.widget.ImageButton;
 
 public class BeatButton extends ImageButton implements View.OnClickListener {
+
+    public static final String PREF_BEATSBUTTON = "BEATSBUTTON_PREF";
+    public static final String PREF_BEATBUTTON_PREFIX = "BEATSBUTTON_INDEX_";
+
     private static enum BeatState implements Parcelable {
         TICK {
             @Override
@@ -60,17 +64,25 @@ public class BeatButton extends ImageButton implements View.OnClickListener {
     public BeatButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        setOnClickListener(this);
-        state = BeatState.TICK;
     }
 
-    public void init(SoundPlayer soundPlayer) {
+    public void init(final Context context, final int i, SoundPlayer soundPlayer) {
         this.soundPlayer = soundPlayer;
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setState(state.next());
+                SharedPreferences.Editor editor = context.getSharedPreferences(PREF_BEATSBUTTON, Context.MODE_PRIVATE).edit();
+                editor.putInt(PREF_BEATBUTTON_PREFIX + i, state.ordinal());
+                editor.apply();
+            }
+        });
+        setState(BeatState.values()[context.getSharedPreferences(PREF_BEATSBUTTON, Context.MODE_PRIVATE).getInt(PREF_BEATBUTTON_PREFIX + i, 0)]);
     }
 
     @Override
     public void onClick(View v) {
-        setState(state.next());
+
     }
 
     public void play() {

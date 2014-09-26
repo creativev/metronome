@@ -8,10 +8,11 @@ import android.util.Log;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static me.creativei.metronome.BeatsTimerStateTask.Callback;
 import static me.creativei.metronome.Constants.LOG_TAG;
 
 public class BeatsTimer extends Fragment {
-    private TimerStateTask timerStateTask;
+    private BeatsTimerStateTask timerStateTask;
     private Timer timer;
     private int delay;
     private boolean isRunning;
@@ -25,6 +26,26 @@ public class BeatsTimer extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         callback = (Callback) activity;
+        if (timerStateTask != null) {
+            timerStateTask.setCallback(callback);
+            return;
+        }
+        timerStateTask = new BeatsTimerStateTask(activity, new Callback() {
+            @Override
+            public int nextVisibleBeatIndex(int from) {
+                return callback.nextVisibleBeatIndex(from);
+            }
+
+            @Override
+            public void play(int i) {
+                callback.play(i);
+            }
+
+            @Override
+            public void fade(int i) {
+                callback.fade(i);
+            }
+        });
     }
 
     @Override
@@ -37,14 +58,6 @@ public class BeatsTimer extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (callback == null) return;
-        timerStateTask = callback.getTimerStateTask();
-        delay = callback.getDelay();
     }
 
     public void start() {
@@ -94,11 +107,5 @@ public class BeatsTimer extends Fragment {
             timerStateTask.runPauseTask();
         }
 
-    }
-
-    public static interface Callback {
-        public TimerStateTask getTimerStateTask();
-
-        int getDelay();
     }
 }
