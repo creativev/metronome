@@ -7,8 +7,8 @@ import android.widget.TextView;
 import me.creativei.listener.ContinuousLongClickListener;
 
 public class NumberWidget {
-    private final TextView textView;
-    private final String displayFormat;
+    private TextView textView;
+    private String displayFormat;
     private final NumberWidgetValueChangeListener listener;
     private int value;
 
@@ -18,6 +18,15 @@ public class NumberWidget {
         this.textView = textView;
         this.displayFormat = displayFormat;
         this.listener = listener;
+        attachListeners(up, down, longPress, min, max);
+    }
+
+    public NumberWidget(Button up, Button down, boolean longPress, int min, int max, NumberWidgetValueChangeListener listener) {
+        this.listener = listener;
+        attachListeners(up, down, longPress, min, max);
+    }
+
+    private void attachListeners(Button up, Button down, boolean longPress, final int min, final int max) {
         up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +68,8 @@ public class NumberWidget {
 
     public void setValue(int value) {
         this.value = value;
-        textView.setText(String.format(displayFormat, value));
+        if (textView != null)
+            textView.setText(String.format(displayFormat, value));
         listener.valueChanged(value);
     }
 

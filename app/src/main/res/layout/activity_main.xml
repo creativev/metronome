@@ -27,16 +27,6 @@
             android:text="@string/strDown"
             android:textColor="@color/red_dark" />
 
-        <TextView
-            android:id="@+id/txtNumBeats"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/strNumBeats"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:visibility="gone" />
-
         <Button
             android:id="@+id/btnNumBeatsUp"
             style="@style/style_btn_face"

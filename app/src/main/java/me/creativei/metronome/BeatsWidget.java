@@ -47,19 +47,17 @@ public class BeatsWidget {
             }
         });
 
-        TextView txtNumBeats = (TextView) context.findViewById(R.id.txtNumBeats);
         Button btnNumBeatsUp = (Button) context.findViewById(R.id.btnNumBeatsUp);
         Button btnNumBeatsDown = (Button) context.findViewById(R.id.btnNumBeatsDown);
         btnNumBeatsDown.setTypeface(fontAwesome);
         btnNumBeatsUp.setTypeface(fontAwesome);
-        beatsPatternWidget = new NumberWidget(txtNumBeats, btnNumBeatsUp, btnNumBeatsDown,
-                false, 1, beatsVizLayout.length, "%d",
-                new NumberWidget.NumberWidgetValueChangeListener() {
-                    @Override
-                    public void valueChanged(int value) {
-                        syncBeatsPatternWidget(value);
-                    }
-                });
+        beatsPatternWidget = new NumberWidget(btnNumBeatsUp, btnNumBeatsDown, false, 1,
+                beatsVizLayout.length, new NumberWidget.NumberWidgetValueChangeListener() {
+            @Override
+            public void valueChanged(int value) {
+                syncBeatsPatternWidget(value);
+            }
+        });
     }
 
     public void onCreate() {
