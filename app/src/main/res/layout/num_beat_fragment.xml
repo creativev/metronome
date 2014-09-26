@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="2dp">
+
+    <Button
+        android:id="@+id/btnNumBeatsDown"
+        style="@style/style_btn_face"
+        android:text="@string/strDown"
+        android:textColor="@color/red_dark" />
+
+    <Button
+        android:id="@+id/btnNumBeatsUp"
+        style="@style/style_btn_face"
+        android:text="@string/strUp"
+        android:textColor="@color/green_dark" />
+</LinearLayout>

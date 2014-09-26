@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
@@ -101,7 +102,7 @@ public class BeatsVizLayout extends LinearLayout {
         for (int i = 0; i < beatButtons.length; i++) {
             beatStates[i] = beatButtons[i].onSaveInstanceState();
         }
-        return new SavedState(parcelable, beatStates);
+        return new SavedState(parcelable, beatStates, visible);
     }
 
     @Override
@@ -112,19 +113,23 @@ public class BeatsVizLayout extends LinearLayout {
             BeatButton beatButton = beatButtons[i];
             beatButton.onRestoreInstanceState(savedState.beatStates[i]);
         }
+        sync(savedState.visible);
     }
 
     private static class SavedState extends BaseSavedState {
         public final Parcelable[] beatStates;
+        public final int visible;
 
         private SavedState(Parcel source) {
             super(source);
             beatStates = source.readParcelableArray(null);
+            visible = source.readInt();
         }
 
-        public SavedState(Parcelable superState, Parcelable[] beatStates) {
+        public SavedState(Parcelable superState, Parcelable[] beatStates, int visible) {
             super(superState);
             this.beatStates = beatStates;
+            this.visible = visible;
         }
 
         @Override

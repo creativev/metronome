@@ -1,6 +1,8 @@
 package me.creativei.metronome;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import java.util.Timer;
@@ -8,18 +10,41 @@ import java.util.TimerTask;
 
 import static me.creativei.metronome.Constants.LOG_TAG;
 
-public class BeatsTimer {
-    public static final String BEATSTIMER_LASTRUN = "BEATSTIMER_LASTRUN";
-    public static final String BEATSTIMER_ISRUNNING = "BEATSTIMER_ISRUNNING";
-    private int delay;
-    private final TimerStateTask timerStateTask;
+public class BeatsTimer extends Fragment {
+    private TimerStateTask timerStateTask;
     private Timer timer;
+    private int delay;
     private boolean isRunning;
     private long lastRun;
+    private Callback callback;
 
-    public BeatsTimer(int delay, TimerStateTask timerStateTask) {
-        this.delay = delay;
-        this.timerStateTask = timerStateTask;
+    public BeatsTimer() {
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        callback = (Callback) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callback = null;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (callback == null) return;
+        timerStateTask = callback.getTimerStateTask();
+        delay = callback.getDelay();
     }
 
     public void start() {
@@ -71,23 +96,9 @@ public class BeatsTimer {
 
     }
 
-    public boolean isRunning() {
-        return isRunning;
-    }
+    public static interface Callback {
+        public TimerStateTask getTimerStateTask();
 
-    public void onRestoreInstanceState(Bundle bundle) {
-        lastRun = bundle.getLong(BEATSTIMER_LASTRUN);
-        isRunning = bundle.getBoolean(BEATSTIMER_ISRUNNING);
-        timerStateTask.onRestoreInstanceState(bundle);
-    }
-
-    public void onSaveInstanceState(Bundle bundle) {
-        bundle.putLong(BEATSTIMER_LASTRUN, lastRun);
-        bundle.putBoolean(BEATSTIMER_ISRUNNING, isRunning);
-        timerStateTask.onSaveInstanceState(bundle);
-    }
-
-    public void restoreRunningState(boolean isRunning) {
-        this.isRunning = isRunning;
+        int getDelay();
     }
 }

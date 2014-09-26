@@ -3,10 +3,10 @@ package me.creativei.metronome;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.view.WindowManager;
 
 import com.google.android.gms.ads.AdRequest;
@@ -16,10 +16,14 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements BeatsTimer.Callback, BpmFragment.Callback, NumBeatFragment.Callback {
     public static final String PREF_KEEP_SCREEN_ON = "KEEP_SCREEN_ON";
     public static final String TEST_DEVICE = "D27BE559F36AC73AFA3ED3E64322B072";
-    private BeatsWidget beatsWidget;
+    private static final String TAG_TASK_FRAGMENT = "task_fragment";
+    private BeatsVizLayout beatsVizLayout;
+    private BpmFragment bpmFragment;
+    private BeatsTimer beatsTimer;
+    private PlayButton btnStart;
     private Tracker tracker;
 
     @Override
@@ -36,8 +40,17 @@ public class MainActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_main);
 
-        beatsWidget = new BeatsWidget(this);
-        beatsWidget.onCreate();
+        beatsVizLayout = (BeatsVizLayout) findViewById(R.id.beatsVizContainer);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        beatsTimer = (BeatsTimer) fragmentManager.findFragmentByTag(TAG_TASK_FRAGMENT);
+        if (beatsTimer == null) {
+            beatsTimer = new BeatsTimer();
+            fragmentManager.beginTransaction().add(beatsTimer, TAG_TASK_FRAGMENT).commit();
+        }
+
+        btnStart = (PlayButton) findViewById(R.id.btnStart);
+        btnStart.init(beatsTimer);
+        bpmFragment = (BpmFragment) fragmentManager.findFragmentById(R.id.bpmContainer);
 
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
@@ -57,38 +70,19 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        beatsWidget.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        beatsWidget.onResume();
         tracker.setScreenName("me.creativei.metronome.MainActivity");
         tracker.send(new HitBuilders.AppViewBuilder().build());
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        beatsWidget.onPause();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        beatsWidget.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        this.onPause();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!isInPortrait()) return true;
+
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem screenAwakeOption = menu.findItem(R.id.menu_screen_awake);
         boolean isScreenWakeOn = getAppStatePref().getBoolean(PREF_KEEP_SCREEN_ON, false);
@@ -128,5 +122,29 @@ public class MainActivity extends ActionBarActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(PREF_KEEP_SCREEN_ON, isChecked);
         editor.apply();
+    }
+
+    @Override
+    public TimerStateTask getTimerStateTask() {
+        return new BeatsTimerStateTask(this, beatsVizLayout);
+    }
+
+    @Override
+    public int getDelay() {
+        return bpmToDelay(bpmFragment.getBpm());
+    }
+
+    @Override
+    public void bpmChanged(int value) {
+        beatsTimer.update(bpmToDelay(value));
+    }
+
+    @Override
+    public void numBeatsChanged(int value) {
+        beatsVizLayout.sync(value);
+    }
+
+    private int bpmToDelay(int finalBpm) {
+        return (int) (60.0 * 1000.0 / finalBpm);
     }
 }

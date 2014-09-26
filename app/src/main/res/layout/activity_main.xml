@@ -13,26 +13,12 @@
         android:layout_height="0dp"
         android:layout_weight="3" />
 
-    <LinearLayout
+    <fragment
         android:id="@+id/numBeatsContainer"
+        android:name="me.creativei.metronome.NumBeatFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:padding="2dp">
-
-        <Button
-            android:id="@+id/btnNumBeatsDown"
-            style="@style/style_btn_face"
-            android:text="@string/strDown"
-            android:textColor="@color/red_dark" />
-
-        <Button
-            android:id="@+id/btnNumBeatsUp"
-            style="@style/style_btn_face"
-            android:text="@string/strUp"
-            android:textColor="@color/green_dark" />
-    </LinearLayout>
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,35 +26,12 @@
         android:layout_weight="2"
         android:orientation="horizontal">
 
-        <LinearLayout
+        <fragment
             android:id="@+id/bpmContainer"
+            android:name="me.creativei.metronome.BpmFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/btnBPMUp"
-                style="@style/style_bpm_btn"
-                android:text="@string/strArrowUp"
-                android:textColor="@color/green_dark" />
-
-            <TextView
-                android:id="@+id/txtBPM"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/strBPM"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="36sp" />
-
-            <Button
-                android:id="@+id/btnBPMDown"
-                style="@style/style_bpm_btn"
-                android:text="@string/strArrowDown"
-                android:textColor="@color/red_dark" />
-        </LinearLayout>
+            android:layout_weight="1" />
 
         <me.creativei.metronome.PlayButton
             android:id="@+id/btnStart"
