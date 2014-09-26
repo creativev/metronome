@@ -1,91 +1,26 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/beatsVizContainer1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="4"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/btnBeats1"
-            style="@style/style_beats" />
-
-        <ImageButton
-            android:id="@+id/btnBeats2"
-            style="@style/style_beats" />
-
-        <ImageButton
-            android:id="@+id/btnBeats3"
-            style="@style/style_beats" />
-
-        <ImageButton
-            android:id="@+id/btnBeats4"
-            style="@style/style_beats" />
-
-        <ImageButton
-            android:id="@+id/btnBeats5"
-            style="@style/style_beats" />
-
-        <ImageButton
-            android:id="@+id/btnBeats6"
-            style="@style/style_beats" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/beatsVizContainer2"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="4"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/btnBeats7"
-            style="@style/style_beats" />
-
-        <ImageButton
-            android:id="@+id/btnBeats8"
-            style="@style/style_beats" />
-
-        <ImageButton
-            android:id="@+id/btnBeats9"
-            style="@style/style_beats" />
-
-        <ImageButton
-            android:id="@+id/btnBeats10"
-            style="@style/style_beats" />
-
-        <ImageButton
-            android:id="@+id/btnBeats11"
-            style="@style/style_beats" />
-
-        <ImageButton
-            android:id="@+id/btnBeats12"
-            style="@style/style_beats" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/beatsVizContainer3"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0"
-        android:orientation="horizontal"
-        android:visibility="gone" />
+    <me.creativei.metronome.BeatsVizLayout
+        android:id="@+id/beatsVizContainer"
+        style="@style/style_beats_viz"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         ads:adSize="SMART_BANNER"
         ads:adUnitId="@string/ad_unit_id" />
-</LinearLayout>
+</RelativeLayout>

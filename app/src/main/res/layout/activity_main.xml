@@ -9,13 +9,9 @@
 
     <me.creativei.metronome.BeatsVizLayout
         android:id="@+id/beatsVizContainer"
-        android:layout_width="match_parent"
+        style="@style/style_beats_viz"
         android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="3"
-        android:animateLayoutChanges="true"
-        android:gravity="center"
-        android:orientation="vertical" />
+        android:layout_weight="3" />
 
     <LinearLayout
         android:id="@+id/numBeatsContainer"

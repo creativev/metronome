@@ -28,12 +28,10 @@ public class MainActivity extends ActionBarActivity {
         if (isInPortrait()) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            supportRequestWindowFeature(Window.FEATURE_ACTION_BAR);
         } else {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         }
 
         setContentView(R.layout.activity_main);
@@ -90,6 +88,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (!isInPortrait()) return true;
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem screenAwakeOption = menu.findItem(R.id.menu_screen_awake);
         boolean isScreenWakeOn = getAppStatePref().getBoolean(PREF_KEEP_SCREEN_ON, false);
