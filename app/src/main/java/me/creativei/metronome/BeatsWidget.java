@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -83,7 +84,7 @@ public class BeatsWidget {
         // Restore App State from Pref
         beatsPatternWidget.setValue(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BEATS_PATTERN_VAL, 4));
         bpmWidget.setValue(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BPM_VAL, DEFAULT_BPM_VAL));
-// TODO       beatsVizLayout.restoreFromPref();
+//        beatsVizLayout.restoreFromPref();
     }
 
     private void syncBeatsPatternWidget(int numBeats) {
@@ -100,16 +101,12 @@ public class BeatsWidget {
     }
 
     public void onSaveInstanceState(Bundle bundle) {
-        Log.d(Constants.LOG_TAG, "onSave: Layout orientation portrait:" + context.isInPortrait());
-// TODO       beatsVizLayout.onSaveInstanceState(bundle);
         beatsTimer.onSaveInstanceState(bundle);
     }
 
     public void onRestoreInstanceState(Bundle bundle) {
-        Log.d(Constants.LOG_TAG, "onRestore: Layout orientation portrait:" + context.isInPortrait());
-        // New layout is in portrait, restore btn state
-//  TODO      beatsVizLayout.onRestoreInstanceState(bundle);
         beatsTimer.onRestoreInstanceState(bundle);
+        // New layout is in portrait, restore btn state
         if (context.isInPortrait()) {
             btnStart.setChecked(beatsTimer.isRunning());
             if (beatsTimer.isRunning()) {

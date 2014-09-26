@@ -1,6 +1,7 @@
 package me.creativei.metronome;
 
 import android.content.Context;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -95,6 +96,53 @@ public class BeatsVizLayout extends LinearLayout {
 
     @Override
     protected Parcelable onSaveInstanceState() {
-        return super.onSaveInstanceState();
+        Parcelable parcelable = super.onSaveInstanceState();
+        Parcelable[] beatStates = new Parcelable[beatButtons.length];
+        for (int i = 0; i < beatButtons.length; i++) {
+            beatStates[i] = beatButtons[i].onSaveInstanceState();
+        }
+        return new SavedState(parcelable, beatStates);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable parcelable) {
+        SavedState savedState = (SavedState) parcelable;
+        super.onRestoreInstanceState(savedState.getSuperState());
+        for (int i = 0; i < beatButtons.length; i++) {
+            BeatButton beatButton = beatButtons[i];
+            beatButton.onRestoreInstanceState(savedState.beatStates[i]);
+        }
+    }
+
+    private static class SavedState extends BaseSavedState {
+        public final Parcelable[] beatStates;
+
+        private SavedState(Parcel source) {
+            super(source);
+            beatStates = source.readParcelableArray(null);
+        }
+
+        public SavedState(Parcelable superState, Parcelable[] beatStates) {
+            super(superState);
+            this.beatStates = beatStates;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            super.writeToParcel(dest, flags);
+            dest.writeParcelableArray(beatStates, flags);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+            @Override
+            public SavedState createFromParcel(Parcel source) {
+                return new SavedState(source);
+            }
+
+            @Override
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
     }
 }

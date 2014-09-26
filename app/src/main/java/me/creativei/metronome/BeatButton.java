@@ -2,7 +2,6 @@ package me.creativei.metronome;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -10,10 +9,6 @@ import android.view.View;
 import android.widget.ImageButton;
 
 public class BeatButton extends ImageButton implements View.OnClickListener {
-
-    public static final String BEAT_STATE = "BEAT_STATE";
-    public static final String BEAT_HIDDEN = "BEAT_HIDDEN";
-
     private static enum BeatState implements Parcelable {
         TICK {
             @Override
@@ -91,26 +86,56 @@ public class BeatButton extends ImageButton implements View.OnClickListener {
         updateImageWithState(state, false);
     }
 
-    public void onRestoreInstanceState(Bundle savedState) {
-        setState((BeatState) savedState.getParcelable(BEAT_STATE));
+    @Override
+    protected void onRestoreInstanceState(Parcelable parcelable) {
+        SavedState beatState = (SavedState) parcelable;
+        super.onRestoreInstanceState(beatState.getSuperState());
+        setState(beatState.state);
     }
 
-    public Bundle onSaveInstanceState() {
-        Bundle toBeSaved = new Bundle();
-        toBeSaved.putParcelable(BEAT_STATE, state);
-        return toBeSaved;
+    @Override
+    public Parcelable onSaveInstanceState() {
+        Parcelable parcelable = super.onSaveInstanceState();
+        return new SavedState(parcelable, state);
+    }
+
+    private static class SavedState extends BaseSavedState {
+        public final BeatState state;
+
+        public SavedState(Parcel source) {
+            super(source);
+            state = source.readParcelable(null);
+        }
+
+        public SavedState(Parcelable superState, BeatState state) {
+            super(superState);
+            this.state = state;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            super.writeToParcel(dest, flags);
+            dest.writeParcelable(state, flags);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+
+            @Override
+            public SavedState createFromParcel(Parcel source) {
+                return new SavedState(source);
+            }
+
+            @Override
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
     }
 
     private void updateImageWithState(BeatState state, boolean glow) {
         String resourceId = "beat_" + state.toString().toLowerCase();
         resourceId = glow ? resourceId + "_glow" : resourceId;
         setImageResource(Utils.getResource(resourceId, R.drawable.class));
-    }
-
-    public void restoreFromPref() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(("BEATFRAGMENT_" + getId()), Context.MODE_PRIVATE);
-        setState(BeatState.values()[sharedPreferences.getInt("STATE", 0)]);
-        updateImageWithState(state, false);
     }
 
     private void setState(BeatState state) {
