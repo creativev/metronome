@@ -5,12 +5,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
 
-import me.creativei.metronome.exception.InvisibleBeatPlayedException;
-
-public class BeatFragment implements View.OnClickListener {
+public class BeatButton extends ImageButton implements View.OnClickListener {
 
     public static final String BEAT_STATE = "BEAT_STATE";
     public static final String BEAT_HIDDEN = "BEAT_HIDDEN";
@@ -59,18 +58,19 @@ public class BeatFragment implements View.OnClickListener {
         };
     }
 
-    private ImageButton imageButton;
     private BeatState state;
-    private boolean hidden;
-    private final MainActivity context;
-    private Callback handler;
+    private Context context;
+    private SoundPlayer soundPlayer;
 
-    public BeatFragment(MainActivity context, Callback handler, ImageButton imageButton) {
+    public BeatButton(Context context, AttributeSet attrs) {
+        super(context, attrs);
         this.context = context;
-        this.handler = handler;
-        this.imageButton = imageButton;
-        this.imageButton.setOnClickListener(this);
+        setOnClickListener(this);
         state = BeatState.TICK;
+    }
+
+    public void init(SoundPlayer soundPlayer) {
+        this.soundPlayer = soundPlayer;
     }
 
     @Override
@@ -79,12 +79,10 @@ public class BeatFragment implements View.OnClickListener {
     }
 
     public void play() {
-        if (!isBeatVisible()) throw new InvisibleBeatPlayedException();
-
         if (state == BeatState.TICK) {
-            handler.tick();
+            soundPlayer.tick();
         } else if (state == BeatState.TOCK) {
-            handler.tock();
+            soundPlayer.tock();
         }
         updateImageWithState(state, true);
     }
@@ -93,63 +91,34 @@ public class BeatFragment implements View.OnClickListener {
         updateImageWithState(state, false);
     }
 
-    public boolean isBeatVisible() {
-        return !hidden;
-    }
-
-    public void show() {
-        setInvisible(false);
-    }
-
-    public void hide() {
-        setInvisible(true);
-    }
-
     public void onRestoreInstanceState(Bundle savedState) {
         setState((BeatState) savedState.getParcelable(BEAT_STATE));
-        setInvisible(savedState.getBoolean(BEAT_HIDDEN));
     }
 
     public Bundle onSaveInstanceState() {
         Bundle toBeSaved = new Bundle();
         toBeSaved.putParcelable(BEAT_STATE, state);
-        toBeSaved.putBoolean(BEAT_HIDDEN, hidden);
         return toBeSaved;
     }
 
     private void updateImageWithState(BeatState state, boolean glow) {
         String resourceId = "beat_" + state.toString().toLowerCase();
         resourceId = glow ? resourceId + "_glow" : resourceId;
-        imageButton.setImageResource(Utils.getResource(resourceId, R.drawable.class));
-    }
-
-    private void setInvisible(boolean val) {
-        hidden = val;
-        imageButton.setVisibility(val ? View.GONE : View.VISIBLE);
-    }
-
-    public String getId() {
-        return Integer.toString(imageButton.getId());
+        setImageResource(Utils.getResource(resourceId, R.drawable.class));
     }
 
     public void restoreFromPref() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(("BEATFRAGMENT_" + imageButton.getId()), Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(("BEATFRAGMENT_" + getId()), Context.MODE_PRIVATE);
         setState(BeatState.values()[sharedPreferences.getInt("STATE", 0)]);
         updateImageWithState(state, false);
     }
 
     private void setState(BeatState state) {
         this.state = state;
-        SharedPreferences sharedPreferences = context.getSharedPreferences(("BEATFRAGMENT_" + imageButton.getId()), Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(("BEATFRAGMENT_" + getId()), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("STATE", state.ordinal());
         editor.apply();
         updateImageWithState(state, false);
-    }
-
-    public static interface Callback {
-        public void tick();
-
-        public void tock();
     }
 }

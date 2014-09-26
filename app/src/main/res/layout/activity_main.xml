@@ -7,84 +7,23 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <me.creativei.metronome.BeatsVizLayout
+        android:id="@+id/beatsVizContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="center"
         android:layout_weight="3"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/beatsVizContainer1"
-            style="@style/style_beats_container">
-
-            <ImageButton
-                android:id="@+id/btnBeats1"
-                style="@style/style_beats" />
-
-            <ImageButton
-                android:id="@+id/btnBeats2"
-                style="@style/style_beats" />
-
-            <ImageButton
-                android:id="@+id/btnBeats3"
-                style="@style/style_beats" />
-
-            <ImageButton
-                android:id="@+id/btnBeats4"
-                style="@style/style_beats" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/beatsVizContainer2"
-            style="@style/style_beats_container">
-
-            <ImageButton
-                android:id="@+id/btnBeats5"
-                style="@style/style_beats" />
-
-            <ImageButton
-                android:id="@+id/btnBeats6"
-                style="@style/style_beats" />
-
-            <ImageButton
-                android:id="@+id/btnBeats7"
-                style="@style/style_beats" />
-
-            <ImageButton
-                android:id="@+id/btnBeats8"
-                style="@style/style_beats" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/beatsVizContainer3"
-            style="@style/style_beats_container">
-
-            <ImageButton
-                android:id="@+id/btnBeats9"
-                style="@style/style_beats" />
-
-            <ImageButton
-                android:id="@+id/btnBeats10"
-                style="@style/style_beats" />
-
-            <ImageButton
-                android:id="@+id/btnBeats11"
-                style="@style/style_beats" />
-
-            <ImageButton
-                android:id="@+id/btnBeats12"
-                style="@style/style_beats" />
-
-        </LinearLayout>
-    </LinearLayout>
+        android:animateLayoutChanges="true"
+        android:gravity="center"
+        android:orientation="vertical" />
 
     <LinearLayout
         android:id="@+id/numBeatsContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="2dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="2dp">
 
         <Button
             android:id="@+id/btnNumBeatsDown"
@@ -135,8 +74,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/strBPM"
-                android:textSize="36sp"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="36sp" />
 
             <Button
                 android:id="@+id/btnBPMDown"

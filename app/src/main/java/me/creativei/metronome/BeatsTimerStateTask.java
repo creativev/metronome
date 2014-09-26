@@ -9,11 +9,11 @@ public class BeatsTimerStateTask implements TimerStateTask {
 
     private int selected = SELECTED_NONE;
     private Activity context;
-    private BeatsVizWidget beatsVizWidget;
+    private BeatsVizLayout beatsVizLayout;
 
-    public BeatsTimerStateTask(Activity context, BeatsVizWidget beatsVizWidget) {
+    public BeatsTimerStateTask(Activity context, BeatsVizLayout beatsVizLayout) {
         this.context = context;
-        this.beatsVizWidget = beatsVizWidget;
+        this.beatsVizLayout = beatsVizLayout;
     }
 
     @Override
@@ -22,12 +22,12 @@ public class BeatsTimerStateTask implements TimerStateTask {
             @Override
             public void run() {
                 if (selected == SELECTED_NONE) {
-                    selected = beatsVizWidget.nextVisibleBeatIndex(0);
+                    selected = beatsVizLayout.nextVisibleBeatIndex(0);
                 } else {
-                    beatsVizWidget.fade(selected);
-                    selected = beatsVizWidget.nextVisibleBeatIndex(selected + 1);
+                    beatsVizLayout.fade(selected);
+                    selected = beatsVizLayout.nextVisibleBeatIndex(selected + 1);
                 }
-                beatsVizWidget.play(selected);
+                beatsVizLayout.play(selected);
             }
         });
     }
@@ -37,7 +37,7 @@ public class BeatsTimerStateTask implements TimerStateTask {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                beatsVizWidget.fade(selected);
+                beatsVizLayout.fade(selected);
                 selected = SELECTED_NONE;
             }
         });
@@ -58,7 +58,7 @@ public class BeatsTimerStateTask implements TimerStateTask {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                beatsVizWidget.fade(selected);
+                beatsVizLayout.fade(selected);
             }
         });
     }

@@ -14,7 +14,7 @@ public class BeatsWidget {
     public static final String PREF_BEATS_PATTERN_VAL = "PREF_BEATS_PATTERN_VAL";
     public static final String PREF_BPM_VAL = "PREF_BPM_VAL";
     private final int DEFAULT_BPM_VAL = 60;
-    private final BeatsVizWidget beatsVizWidget;
+    private final BeatsVizLayout beatsVizLayout;
     private MainActivity context;
     private ToggleButton btnStart;
     private BeatsTimer beatsTimer;
@@ -24,7 +24,8 @@ public class BeatsWidget {
 
     public BeatsWidget(MainActivity context) {
         this.context = context;
-        beatsVizWidget = new BeatsVizWidget(context);
+        beatsVizLayout = (BeatsVizLayout) context.findViewById(R.id.beatsVizContainer);
+
         if (!context.isInPortrait()) return;
 
         btnStart = (ToggleButton) context.findViewById(R.id.btnStart);
@@ -52,7 +53,7 @@ public class BeatsWidget {
         btnNumBeatsDown.setTypeface(fontAwesome);
         btnNumBeatsUp.setTypeface(fontAwesome);
         beatsPatternWidget = new NumberWidget(txtNumBeats, btnNumBeatsUp, btnNumBeatsDown,
-                false, 1, beatsVizWidget.length, "%d",
+                false, 1, beatsVizLayout.length, "%d",
                 new NumberWidget.NumberWidgetValueChangeListener() {
                     @Override
                     public void valueChanged(int value) {
@@ -63,11 +64,11 @@ public class BeatsWidget {
 
     public void onCreate() {
         if (!context.isInPortrait()) {
-            beatsTimer = new BeatsTimer(bpmToDelay(savedBpm()), new BeatsTimerStateTask(context, beatsVizWidget));
+            beatsTimer = new BeatsTimer(bpmToDelay(savedBpm()), new BeatsTimerStateTask(context, beatsVizLayout));
             syncBeatsPatternWidget(savedBeatsPatternPosition());
             return;
         }
-        beatsTimer = new BeatsTimer(bpmToDelay(parseBpm()), new BeatsTimerStateTask(context, beatsVizWidget));
+        beatsTimer = new BeatsTimer(bpmToDelay(parseBpm()), new BeatsTimerStateTask(context, beatsVizLayout));
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,12 +85,12 @@ public class BeatsWidget {
         // Restore App State from Pref
         beatsPatternWidget.setValue(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BEATS_PATTERN_VAL, 4));
         bpmWidget.setValue(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BPM_VAL, DEFAULT_BPM_VAL));
-        beatsVizWidget.restoreFromPref();
+// TODO       beatsVizLayout.restoreFromPref();
     }
 
     private void syncBeatsPatternWidget(int numBeats) {
         saveBeatsPattern(numBeats);
-        beatsVizWidget.sync(numBeats);
+        beatsVizLayout.sync(numBeats);
     }
 
     public void onResume() {
@@ -102,14 +103,14 @@ public class BeatsWidget {
 
     public void onSaveInstanceState(Bundle bundle) {
         Log.d(Constants.LOG_TAG, "onSave: Layout orientation portrait:" + context.isInPortrait());
-        beatsVizWidget.onSaveInstanceState(bundle);
+// TODO       beatsVizLayout.onSaveInstanceState(bundle);
         beatsTimer.onSaveInstanceState(bundle);
     }
 
     public void onRestoreInstanceState(Bundle bundle) {
         Log.d(Constants.LOG_TAG, "onRestore: Layout orientation portrait:" + context.isInPortrait());
         // New layout is in portrait, restore btn state
-        beatsVizWidget.onRestoreInstanceState(bundle);
+//  TODO      beatsVizLayout.onRestoreInstanceState(bundle);
         beatsTimer.onRestoreInstanceState(bundle);
         if (context.isInPortrait()) {
             btnStart.setChecked(beatsTimer.isRunning());

@@ -1,5 +1,8 @@
 package me.creativei.metronome;
 
+import android.content.Context;
+import android.content.res.Configuration;
+
 import java.lang.reflect.Field;
 
 public class Utils {
@@ -15,5 +18,9 @@ public class Utils {
         } catch (IllegalAccessException | NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static boolean isInPortrait(Context context) {
+        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 }
