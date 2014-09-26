@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Metronome</string>
+    <string name="app_name">Guitar Tempo and Metronome</string>
     <string name="settings_screen_awake">Screen Awake</string>
     <string name="strBeats">4/4</string>
     <string name="strStart">Start</string>

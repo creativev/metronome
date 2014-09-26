@@ -11,10 +11,19 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        release {
+            storeFile file("/Users/anagri/Dropbox/android/keystore/cryptokey")
+            storePassword "xv9]o3t=oa"
+            keyAlias "metronome-app-key"
+            keyPassword "=sf=h88k2+Jh"
+        }
+    }
     buildTypes {
         release {
-            runProguard false
+            runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
