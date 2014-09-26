@@ -84,6 +84,7 @@ public class BeatsWidget {
         // Restore App State from Pref
         beatsPatternWidget.setValue(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BEATS_PATTERN_VAL, 4));
         bpmWidget.setValue(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BPM_VAL, DEFAULT_BPM_VAL));
+        beatsVizWidget.restoreFromPref();
     }
 
     private void syncBeatsPatternWidget(int numBeats) {

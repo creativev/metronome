@@ -1,5 +1,6 @@
 package me.creativei.metronome;
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ public class BeatsVizWidget implements BeatFragment.Callback {
     public BeatsVizWidget(MainActivity context) {
         this.context = context;
         for (int i = 0; i < beatFragments.length; i++) {
-            beatFragments[i] = new BeatFragment(this, ((ImageButton) context.findViewById(Utils.getResourcesId("btnBeats" + (i + 1)))));
+            beatFragments[i] = new BeatFragment(context, this, ((ImageButton) context.findViewById(Utils.getResourcesId("btnBeats" + (i + 1)))));
         }
         soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         tick = soundPool.load(context, R.raw.tick, 1);
@@ -88,13 +89,19 @@ public class BeatsVizWidget implements BeatFragment.Callback {
 
     public void onSaveInstanceState(Bundle bundle) {
         for (BeatFragment beatFragment : beatFragments) {
-            beatFragment.onSaveInstanceState(bundle);
+            bundle.putParcelable(beatFragment.getId(), beatFragment.onSaveInstanceState());
         }
     }
 
     public void onRestoreInstanceState(Bundle bundle) {
         for (BeatFragment beatFragment : beatFragments) {
-            beatFragment.onRestoreInstanceState(bundle);
+            beatFragment.onRestoreInstanceState(bundle.getBundle(beatFragment.getId()));
+        }
+    }
+
+    public void restoreFromPref() {
+        for (BeatFragment beatFragment : beatFragments) {
+            beatFragment.restoreFromPref();
         }
     }
 }

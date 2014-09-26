@@ -1,5 +1,7 @@
 package me.creativei.metronome;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -60,9 +62,11 @@ public class BeatFragment implements View.OnClickListener {
     private ImageButton imageButton;
     private BeatState state;
     private boolean hidden;
+    private final MainActivity context;
     private Callback handler;
 
-    public BeatFragment(Callback handler, ImageButton imageButton) {
+    public BeatFragment(MainActivity context, Callback handler, ImageButton imageButton) {
+        this.context = context;
         this.handler = handler;
         this.imageButton = imageButton;
         this.imageButton.setOnClickListener(this);
@@ -71,7 +75,7 @@ public class BeatFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        updateImageButton(state.next());
+        setState(state.next());
     }
 
     public void play() {
@@ -101,22 +105,16 @@ public class BeatFragment implements View.OnClickListener {
         setInvisible(true);
     }
 
-    public void onRestoreInstanceState(Bundle bundle) {
-        Bundle savedState = bundle.getBundle(Integer.toString(imageButton.getId()));
-        updateImageButton((BeatState) savedState.getParcelable(BEAT_STATE));
+    public void onRestoreInstanceState(Bundle savedState) {
+        setState((BeatState) savedState.getParcelable(BEAT_STATE));
         setInvisible(savedState.getBoolean(BEAT_HIDDEN));
     }
 
-    public void onSaveInstanceState(Bundle bundle) {
+    public Bundle onSaveInstanceState() {
         Bundle toBeSaved = new Bundle();
         toBeSaved.putParcelable(BEAT_STATE, state);
         toBeSaved.putBoolean(BEAT_HIDDEN, hidden);
-        bundle.putParcelable(Integer.toString(imageButton.getId()), toBeSaved);
-    }
-
-    private void updateImageButton(BeatState state) {
-        this.state = state;
-        updateImageWithState(state, false);
+        return toBeSaved;
     }
 
     private void updateImageWithState(BeatState state, boolean glow) {
@@ -128,6 +126,25 @@ public class BeatFragment implements View.OnClickListener {
     private void setInvisible(boolean val) {
         hidden = val;
         imageButton.setVisibility(val ? View.GONE : View.VISIBLE);
+    }
+
+    public String getId() {
+        return Integer.toString(imageButton.getId());
+    }
+
+    public void restoreFromPref() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(("BEATFRAGMENT_" + imageButton.getId()), Context.MODE_PRIVATE);
+        setState(BeatState.values()[sharedPreferences.getInt("STATE", 0)]);
+        updateImageWithState(state, false);
+    }
+
+    private void setState(BeatState state) {
+        this.state = state;
+        SharedPreferences sharedPreferences = context.getSharedPreferences(("BEATFRAGMENT_" + imageButton.getId()), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("STATE", state.ordinal());
+        editor.apply();
+        updateImageWithState(state, false);
     }
 
     public static interface Callback {
