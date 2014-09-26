@@ -4,12 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 public class BeatsWidget {
     public static final String PREF_BEATS_PATTERN_VAL = "PREF_BEATS_PATTERN_VAL";
@@ -17,7 +14,7 @@ public class BeatsWidget {
     private final int DEFAULT_BPM_VAL = 60;
     private final BeatsVizLayout beatsVizLayout;
     private MainActivity context;
-    private ToggleButton btnStart;
+    private PlayButton btnStart;
     private BeatsTimer beatsTimer;
 
     private NumberWidget bpmWidget;
@@ -29,11 +26,9 @@ public class BeatsWidget {
 
         if (!context.isInPortrait()) return;
 
-        btnStart = (ToggleButton) context.findViewById(R.id.btnStart);
-        Typeface fontAwesome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
-        btnStart.setTypeface(fontAwesome);
-        btnStart.setTextColor(context.getResources().getColor(R.color.green_dark));
+        btnStart = (PlayButton) context.findViewById(R.id.btnStart);
 
+        Typeface fontAwesome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface fontCabin = Typeface.createFromAsset(context.getAssets(), "fonts/Cabin-Regular.ttf");
         TextView txtBpm = (TextView) context.findViewById(R.id.txtBPM);
         txtBpm.setTypeface(fontCabin);
@@ -68,19 +63,7 @@ public class BeatsWidget {
             return;
         }
         beatsTimer = new BeatsTimer(bpmToDelay(parseBpm()), new BeatsTimerStateTask(context, beatsVizLayout));
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (btnStart.isChecked()) {
-                    beatsTimer.start();
-                    btnStart.setTextColor(context.getResources().getColor(R.color.red_dark));
-                } else {
-                    beatsTimer.stop();
-                    btnStart.setTextColor(context.getResources().getColor(R.color.green_dark));
-                }
-            }
-        });
-
+        btnStart.init(beatsTimer);
         // Restore App State from Pref
         beatsPatternWidget.setValue(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BEATS_PATTERN_VAL, 4));
         bpmWidget.setValue(context.getPreferences(Context.MODE_PRIVATE).getInt(PREF_BPM_VAL, DEFAULT_BPM_VAL));
@@ -107,12 +90,6 @@ public class BeatsWidget {
     public void onRestoreInstanceState(Bundle bundle) {
         beatsTimer.onRestoreInstanceState(bundle);
         // New layout is in portrait, restore btn state
-        if (context.isInPortrait()) {
-            btnStart.setChecked(beatsTimer.isRunning());
-            if (beatsTimer.isRunning()) {
-                btnStart.setTextColor(context.getResources().getColor(R.color.red_dark));
-            }
-        }
     }
 
     private int parseBpm() {

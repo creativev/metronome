@@ -70,7 +70,7 @@
                 android:textColor="@color/red_dark" />
         </LinearLayout>
 
-        <ToggleButton
+        <me.creativei.metronome.PlayButton
             android:id="@+id/btnStart"
             style="@style/toggleButton"
             android:layout_width="0dp"
