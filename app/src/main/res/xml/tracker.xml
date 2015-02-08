@@ -2,5 +2,5 @@
 <resources>
     <string name="ga_trackingId">UA-39102274-5</string>
     <integer name="ga_sessionTimeout">600</integer>
-    <screenName name="me.creativei.metronome.MainActivity">Metronome Screen</screenName>
+    <screenName name="co.creativev.metronome.MainActivity">Metronome Screen</screenName>
 </resources>

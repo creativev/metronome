@@ -1,4 +1,4 @@
-package me.creativei.metronome.exception;
+package co.creativev.metronome.exception;
 
 public class InvisibleBeatPlayedException extends RuntimeException {
     public InvisibleBeatPlayedException() {

@@ -1,10 +1,10 @@
-package me.creativei.metronome;
+package co.creativev.metronome;
 
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import me.creativei.listener.ContinuousLongClickListener;
+import co.creativev.listener.ContinuousLongClickListener;
 
 public class NumberWidget {
     private TextView textView;

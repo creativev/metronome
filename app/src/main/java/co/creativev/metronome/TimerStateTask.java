@@ -1,4 +1,4 @@
-package me.creativei.metronome;
+package co.creativev.metronome;
 
 public interface TimerStateTask {
     void runStartTask();

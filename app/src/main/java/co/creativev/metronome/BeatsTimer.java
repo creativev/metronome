@@ -1,4 +1,4 @@
-package me.creativei.metronome;
+package co.creativev.metronome;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,8 +8,8 @@ import android.util.Log;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static me.creativei.metronome.BeatsTimerStateTask.Callback;
-import static me.creativei.metronome.Constants.LOG_TAG;
+import static co.creativev.metronome.BeatsTimerStateTask.Callback;
+import static co.creativev.metronome.Constants.LOG_TAG;
 
 public class BeatsTimer extends Fragment {
     private BeatsTimerStateTask timerStateTask;

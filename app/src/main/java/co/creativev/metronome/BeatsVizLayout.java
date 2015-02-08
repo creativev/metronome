@@ -1,4 +1,4 @@
-package me.creativei.metronome;
+package co.creativev.metronome;
 
 import android.content.Context;
 import android.os.Parcel;
@@ -7,9 +7,9 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
-import me.creativei.metronome.exception.NoBeatVisibleException;
+import co.creativev.metronome.exception.NoBeatVisibleException;
 
-import static me.creativei.metronome.Utils.isInPortrait;
+import static co.creativev.metronome.Utils.isInPortrait;
 
 public class BeatsVizLayout extends LinearLayout {
     private Context context;

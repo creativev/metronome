@@ -6,7 +6,7 @@
     android:background="@drawable/gradient"
     tools:context=".MainActivity">
 
-    <me.creativei.metronome.BeatsVizLayout
+    <co.creativev.metronome.BeatsVizLayout
         android:id="@+id/beatsVizContainer"
         style="@style/style_beats_viz"
         android:layout_height="match_parent"
@@ -25,7 +25,7 @@
         ads:adUnitId="@string/ad_unit_id" />
 
     <!-- Hidden Widgets-->
-    <me.creativei.metronome.PlayButton
+    <co.creativev.metronome.PlayButton
         android:id="@+id/btnStart"
         style="@style/toggleButton"
         android:layout_width="0dp"
@@ -35,14 +35,14 @@
 
     <fragment
         android:id="@+id/bpmContainer"
-        android:name="me.creativei.metronome.BpmFragment"
+        android:name="co.creativev.metronome.BpmFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone" />
 
     <fragment
         android:id="@+id/numBeatsContainer"
-        android:name="me.creativei.metronome.NumBeatFragment"
+        android:name="co.creativev.metronome.NumBeatFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone" />

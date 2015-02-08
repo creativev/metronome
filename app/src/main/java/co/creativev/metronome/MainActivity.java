@@ -1,4 +1,4 @@
-package me.creativei.metronome;
+package co.creativev.metronome;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;

@@ -1,4 +1,4 @@
-package me.creativei.metronome;
+package co.creativev.metronome;
 
 import android.app.Activity;
 import android.content.Context;
