@@ -8,4 +8,10 @@
         android:icon="@drawable/ic_screen_on"
         android:title="@string/settings_screen_awake"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_other_apps"
+        android:checkable="true"
+        android:icon="@drawable/ic_other_apps"
+        android:title="@string/other_apps"
+        app:showAsAction="ifRoom" />
 </menu>

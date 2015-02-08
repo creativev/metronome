@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,15 +13,16 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
 
-    <com.google.android.gms.ads.AdView
+    <com.inmobi.monetization.IMBanner
         android:id="@+id/adView"
+        adSize="15"
+        appId="0a1022908b364f8291b4afa4a3927d54"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/ad_unit_id" />
+        android:minHeight="50dp" />
 
     <!-- Hidden Widgets-->
     <co.creativev.metronome.PlayButton

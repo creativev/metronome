@@ -1,7 +1,9 @@
 package co.creativev.metronome;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
@@ -9,11 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.flurry.android.FlurryAgent;
+import com.inmobi.commons.InMobi;
+import com.inmobi.monetization.IMBanner;
 
 
 public class MainActivity extends ActionBarActivity implements BeatsTimerStateTask.Callback, BpmFragment.Callback, NumBeatFragment.Callback {
@@ -22,7 +22,6 @@ public class MainActivity extends ActionBarActivity implements BeatsTimerStateTa
     private static final String TAG_TASK_FRAGMENT = "task_fragment";
     private BeatsVizLayout beatsVizLayout;
     private BeatsTimer beatsTimer;
-    private Tracker tracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +48,10 @@ public class MainActivity extends ActionBarActivity implements BeatsTimerStateTa
         PlayButton btnStart = (PlayButton) findViewById(R.id.btnStart);
         btnStart.init(beatsTimer);
 
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice(TEST_DEVICE)
-                .build();
-        AdView adView = (AdView) findViewById(R.id.adView);
-        adView.loadAd(adRequest);
-
-        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-        tracker = analytics.newTracker(R.xml.tracker);
+        InMobi.initialize(this, getString(R.string.inmobi_id));
+        IMBanner adView = (IMBanner) findViewById(R.id.adView);
+        adView.loadBanner();
+        FlurryAgent.init(this, getString(R.string.flurry_analytics_id));
     }
 
     public boolean isInPortrait() {
@@ -78,9 +72,14 @@ public class MainActivity extends ActionBarActivity implements BeatsTimerStateTa
     @Override
     protected void onResume() {
         super.onResume();
-        tracker.setScreenName("me.creativei.metronome.MainActivity");
-        tracker.send(new HitBuilders.AppViewBuilder().build());
+        FlurryAgent.onStartSession(this);
         beatsTimer.resume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FlurryAgent.onEndSession(this);
     }
 
     @Override
@@ -102,6 +101,12 @@ public class MainActivity extends ActionBarActivity implements BeatsTimerStateTa
             boolean isScreenWakeOn = !wasScreenWakeOn;
             saveScreenState(isScreenWakeOn);
             setupScreenWakeMenu(item, isScreenWakeOn);
+            return true;
+        }
+        if (id == R.id.menu_other_apps) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(getString(R.string.play_publisher_url)));
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -31,3 +31,15 @@
 -keepnames class * implements android.os.Parcelable {
     public static final ** CREATOR;
 }
+
+#flurry
+-keep class com.flurry.** { *; }
+-dontwarn com.flurry.**
+
+#inmobi
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient{
+     public *;
+}
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient$Info{
+     public *;
+}

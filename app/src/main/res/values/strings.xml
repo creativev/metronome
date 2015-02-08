@@ -11,6 +11,9 @@
     <string name="strDown">\uF068</string>
     <string name="strArrowUp">\uF077</string>
     <string name="strArrowDown">\uF078</string>
-    <string name="ad_unit_id">ca-app-pub-6639475559641591/5701216669</string>
     <string name="msg_accs_beats_button">Beats State</string>
+    <string name="other_apps">Our Other Apps</string>
+    <string name="flurry_analytics_id">K238CM399XS2ZGDYRP47</string>
+    <string name="inmobi_id">0a1022908b364f8291b4afa4a3927d54</string>
+    <string name="play_publisher_url">market://search?q=pub:CreativeV</string>
 </resources>
